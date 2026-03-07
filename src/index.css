@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Dark Theme variables (Default) */
+  --bg-primary: #0b1120;
+  --bg-secondary: #111827;
+  --bg-card: #1f2937;
+  --text-primary: #f9fafb;
+  --text-secondary: #9ca3af;
+  --border-color: #374151;
+  --accent-color: #3b82f6;
+  /* Blue */
+  --accent-gradient: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  /* Blue to Purple */
+  --hover-primary: rgba(59, 130, 246, 0.1);
+}
+
+[data-theme='light'] {
+  --bg-primary: #fefce8;
+  /* Very light yellow for warmth */
+  --bg-secondary: #fdfdfd;
+  --bg-card: #ffffff;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --border-color: #000000;
+  /* Solid black border for maximum clarity */
+  --accent-color: #f59e0b;
+  /* Warmer interactive color */
+  --accent-gradient: linear-gradient(135deg, #f59e0b, #eab308);
+  /* Yellow gradient */
+  --hover-primary: rgba(245, 158, 11, 0.1);
+  --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.025);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  line-height: 1.6;
+}
+
+/* Base Styles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+a {
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* Reusable Utility Classes */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section {
+  padding: 5rem 0;
+}
+
+/* Gradient text */
+.gradient-text {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.gradient-bg {
+  background: var(--accent-gradient);
+  color: #ffffff;
+}
+
+/* Gradients for Certification lines and Project Tags */
+.grad-orange {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+}
+
+.grad-blue {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.grad-green {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.grad-purple {
+  background: linear-gradient(135deg, #a855f7, #9333ea);
+}
+
+.grad-red {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.grad-pink {
+  background: linear-gradient(135deg, #ec4899, #db2777);
+}
+
+/* Fade-in Animation Classes */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  will-change: opacity, visibility;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Card hover layout */
+.card-hover {
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease;
+  border: 1px solid var(--border-color);
+  /* Add base border to transition from */
+  position: relative;
+}
+
+/* Interactive Cursor Glow */
+.card-hover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0),
+      var(--hover-primary, rgba(255, 255, 255, 0.05)),
+      transparent 40%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+.card-hover:hover::before {
+  opacity: 1;
+}
+
+.card-hover>* {
+  position: relative;
+  z-index: 1;
+}
+
+.card-hover:hover {
+  transform: translateY(-8px);
+  /* The glow uses the accent color for a nice subtle aura */
+  box-shadow: 0 15px 35px -5px rgba(59, 130, 246, 0.25), 0 0 20px rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+[data-theme='light'] .card-hover {
+  box-shadow: var(--shadow-light);
+  border: 2px solid var(--border-color);
+  /* 2px solid black for maximum clarity */
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+[data-theme='light'] .card-hover:hover {
+  box-shadow: 0 15px 35px -5px rgba(245, 158, 11, 0.2), 0 0 20px rgba(245, 158, 11, 0.1);
+  border-color: var(--accent-color);
+  /* Glow accent on hover */
+}
