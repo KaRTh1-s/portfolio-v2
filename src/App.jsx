@@ -31,10 +31,10 @@ function App() {
   }, []);
 
   return (
-    <div className="app-container" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="app-container" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', overflowX: 'hidden', width: '100%' }}>
       <Navbar />
 
-      <main style={{ flex: 1 }}>
+      <main style={{ flex: 1, overflowX: 'hidden', width: '100%' }}>
         <Hero />
         <About />
         <Education />

@@ -176,8 +176,8 @@ const Achievements = () => {
           .badges-grid-5 { grid-template-columns: repeat(2, 1fr) !important; }
           .badges-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
         }
-        @media (max-width: 400px) {
-          .badges-grid-5 { grid-template-columns: repeat(2, 1fr) !important; }
+        @media (max-width: 480px) {
+          .badges-grid-5 { grid-template-columns: 1fr !important; }
           .badges-grid-4 { grid-template-columns: 1fr !important; }
         }
       `}} />

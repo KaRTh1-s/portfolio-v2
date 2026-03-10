@@ -102,14 +102,15 @@ const Contact = () => {
                         margin: '0 auto'
                     }}>
                         {/* Contact Info (Left) */}
-                        <div ref={leftRef} className="fade-in" style={{
+                        <div ref={leftRef} className="fade-in contact-info" style={{
                             background: 'var(--bg-card)',
                             borderRadius: '16px',
                             border: '1px solid var(--border-color)',
-                            padding: '2.5rem',
+                            padding: '2rem',
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: '2rem'
+                            gap: '1.5rem',
+                            minWidth: 0
                         }}>
                             <h3 style={{ fontSize: '1.3rem', fontWeight: 600 }}>Contact Information</h3>
 
@@ -180,13 +181,14 @@ const Contact = () => {
                         </div>
 
                         {/* Form (Right) */}
-                        <div ref={rightRef} className="fade-in" style={{
+                        <div ref={rightRef} className="fade-in contact-form-box" style={{
                             background: 'var(--bg-card)',
                             borderRadius: '16px',
                             border: '1px solid var(--border-color)',
-                            padding: '2.5rem'
+                            padding: '2rem',
+                            minWidth: 0
                         }}>
-                            <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '2rem' }}>Send me a message</h3>
+                            <h3 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: '1.5rem' }}>Send me a message</h3>
 
                             <form className="contact-form" onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -248,7 +250,7 @@ const Contact = () => {
             </section>
 
             {/* Footer embedded within Contact file to simplify App.jsx */}
-            <footer style={{ background: 'var(--bg-card)', borderTop: '1px solid var(--border-color)', padding: '4rem 0 2rem' }}>
+            <footer style={{ background: 'var(--bg-card)', borderTop: '1px solid var(--border-color)', padding: '4rem 0 2rem', overflow: 'hidden', width: '100%' }}>
                 <div className="container">
                     <div className="footer-grid" style={{
                         display: 'grid',
@@ -256,11 +258,11 @@ const Contact = () => {
                         gap: '3rem',
                         marginBottom: '3rem'
                     }}>
-                        <div>
-                            <h2 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '1rem', color: 'var(--accent-color)' }}>
+                        <div style={{ minWidth: 0 }}>
+                            <h2 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '1rem', color: 'var(--accent-color)', wordBreak: 'break-word' }}>
                                 KARTHIKEYAN S
                             </h2>
-                            <p style={{ color: 'var(--text-secondary)', maxWidth: '300px', lineHeight: 1.6 }}>
+                            <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>
                                 Full Stack Developer passionate about creating amazing web experiences.
                             </p>
                         </div>
@@ -336,7 +338,13 @@ const Contact = () => {
         }
         @media (max-width: 900px) {
           .contact-grid { grid-template-columns: 1fr !important; }
-          .footer-grid { grid-template-columns: 1fr !important; gap: 2rem; }
+          .footer-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+        }
+        @media (max-width: 768px) {
+          .contact-info { padding: 1.25rem !important; gap: 1.25rem !important; }
+          .contact-form-box { padding: 1.25rem !important; }
+          .contact-form-box h3 { margin-bottom: 1rem !important; }
+          footer { padding: 2.5rem 0 1.5rem !important; }
         }
       `}} />
         </>
