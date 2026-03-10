@@ -36,18 +36,19 @@ const EducationItem = ({ index, data }) => {
                 color: 'white',
                 position: 'relative'
             }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                <div className="edu-banner-inner" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', flexWrap: 'wrap' }}>
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', flex: 1, minWidth: 0 }}>
                         <div style={{
                             background: 'rgba(255, 255, 255, 0.2)',
                             padding: '1rem',
                             borderRadius: '12px',
-                            backdropFilter: 'blur(5px)'
+                            backdropFilter: 'blur(5px)',
+                            flexShrink: 0
                         }}>
                             <GraduationCap size={32} color="white" />
                         </div>
-                        <div>
-                            <h3 style={{ fontSize: '1.5rem', fontWeight: 700, margin: 0, color: 'white' }}>{data.title}</h3>
+                        <div style={{ minWidth: 0, flex: 1 }}>
+                            <h3 style={{ fontSize: '1.5rem', fontWeight: 700, margin: 0, color: 'white', wordBreak: 'break-word' }}>{data.title}</h3>
                             <p style={{ fontSize: '1.1rem', opacity: 0.9, marginTop: '4px' }}>{data.subtitle}</p>
 
                             <div style={{ display: 'flex', gap: '1.5rem', marginTop: '1rem', flexWrap: 'wrap' }}>
@@ -60,13 +61,14 @@ const EducationItem = ({ index, data }) => {
                             </div>
                         </div>
                     </div>
-                    <div style={{
+                    <div className="edu-score-box" style={{
                         background: 'rgba(255, 255, 255, 0.2)',
                         padding: '1rem',
                         borderRadius: '12px',
                         textAlign: 'center',
                         backdropFilter: 'blur(5px)',
-                        minWidth: '100px'
+                        minWidth: '110px',
+                        flexShrink: 0
                     }}>
                         <div style={{ fontSize: '0.8rem', opacity: 0.8, textTransform: 'uppercase', letterSpacing: '1px' }}>{data.scoreLabel}</div>
                         <div style={{ fontSize: '1.5rem', fontWeight: 800 }}>{data.score}</div>
@@ -192,6 +194,14 @@ const Education = () => {
                 __html: `
         @media (max-width: 768px) {
           .edu-details { grid-template-columns: 1fr !important; }
+          .edu-score-box {
+            width: 100%;
+            min-width: unset !important;
+            text-align: left !important;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+          }
         }
       `}} />
         </section>

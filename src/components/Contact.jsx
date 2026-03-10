@@ -66,22 +66,25 @@ const Contact = () => {
             {/* Success Popup */}
             <div style={{
                 position: 'fixed',
-                top: showSuccess ? '20px' : '-100px',
+                top: showSuccess ? '80px' : '-120px',
                 left: '50%',
                 transform: 'translateX(-50%)',
                 background: 'var(--bg-card)',
                 border: '1px solid var(--border-color)',
-                padding: '1rem 2rem',
+                padding: '1rem 1.5rem',
                 borderRadius: '8px',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '10px',
                 boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
                 zIndex: 9999,
-                transition: 'top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+                transition: 'top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                maxWidth: 'calc(100vw - 2rem)',
+                boxSizing: 'border-box',
+                whiteSpace: 'nowrap',
             }}>
                 <CheckCircle color="var(--accent-color)" size={24} />
-                <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>Thank you for contacting me! Message sent successfully.</span>
+                <span style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9rem' }}>Message sent successfully!</span>
             </div>
             <section id="contact" className="section" style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingBottom: '2rem' }}>
                 <div className="container">

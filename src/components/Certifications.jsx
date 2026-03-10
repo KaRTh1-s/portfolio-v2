@@ -140,25 +140,26 @@ const Certifications = () => {
 
             {/* Certificate Modal */}
             {selectedCert && (
-                <div style={{
+                <div className="cert-modal-overlay" style={{
                     position: 'fixed',
                     top: 0,
                     left: 0,
                     width: '100vw',
                     height: '100vh',
-                    background: 'rgba(0, 0, 0, 0.8)',
+                    background: 'rgba(0, 0, 0, 0.85)',
                     backdropFilter: 'blur(4px)',
                     zIndex: 9999,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: '2rem'
+                    padding: '1rem',
+                    boxSizing: 'border-box'
                 }} onClick={() => setSelectedCert(null)}>
                     <div style={{
                         background: 'var(--bg-card)',
                         width: '100%',
                         maxWidth: '900px',
-                        height: '80vh',
+                        maxHeight: '90vh',
                         borderRadius: '16px',
                         overflow: 'hidden',
                         display: 'flex',
@@ -196,11 +197,11 @@ const Certifications = () => {
                         </div>
 
                         {/* Modal Body - local image viewer */}
-                        <div style={{ flex: 1, position: 'relative', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'auto', padding: '1rem' }}>
+                        <div style={{ flex: 1, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: '0.75rem', minHeight: 0 }}>
                             <img
                                 src={selectedCert}
                                 alt="Certificate Document"
-                                style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px' }}
+                                style={{ maxWidth: '100%', maxHeight: '100%', width: 'auto', height: 'auto', objectFit: 'contain', borderRadius: '4px', display: 'block' }}
                             />
                         </div>
                     </div>
@@ -214,6 +215,13 @@ const Certifications = () => {
         }
         @media (max-width: 600px) {
           .certs-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 768px) {
+          .cert-modal-overlay {
+            padding: 0.75rem !important;
+            align-items: flex-start !important;
+            padding-top: 4rem !important;
+          }
         }
       `}} />
         </section>
