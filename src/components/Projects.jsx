@@ -25,7 +25,7 @@ const ProjectCard = ({ project, index }) => {
         <div ref={cardRef} className="fade-in card-hover" style={{
             background: 'var(--bg-card)',
             borderRadius: '16px',
-            border: '1px solid var(--border-color)',
+            border: '2px solid var(--border-color)',
             overflow: 'hidden',
             display: 'flex',
             flexDirection: 'column',

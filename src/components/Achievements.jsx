@@ -27,7 +27,7 @@ const Badge = ({ badge, index }) => {
         <div ref={badgeRef} className="fade-in card-hover" style={{
             background: 'var(--bg-card)',
             borderRadius: '16px',
-            border: '1px solid var(--border-color)',
+            border: '2px solid var(--border-color)',
             padding: '2rem 1.5rem',
             display: 'flex',
             flexDirection: 'column',
@@ -81,7 +81,7 @@ const Badge = ({ badge, index }) => {
 
 const Achievements = () => {
     const leetcodeBadges = [
-        { title: '100 Days Badge 2025', description: 'Solving Problems 100+ Days in 2025', color: '#fbbf24', image: '/leetcode/100-days.png', imageStyle: { objectFit: 'cover', transform: 'scale(1.4)' } }, // Yellow
+        { title: '100 Days Badge 2025', description: 'Solving Problems 100+ Days in 2025', color: '#92400e', image: '/leetcode/100-days.png', imageStyle: { objectFit: 'cover', transform: 'scale(1.4)' } }, // Brown
         { title: '50 Days Badge 2025', description: 'Solving Problems 50+ Days in 2025', color: '#4ade80', image: '/leetcode/50-days.png', imageStyle: { objectFit: 'cover', transform: 'scale(1.4)' } }, // Green
         { title: 'DCC August 2025', description: 'Daily Coding Challenge August', color: '#fb923c', image: '/leetcode/dcc-aug.png', imageStyle: { objectFit: 'cover', transform: 'scale(1.4)' } }, // Orange
         { title: 'DCC September 2025', description: 'Daily Coding Challenge September', color: '#f472b6', image: '/leetcode/dcc-sep.png', imageStyle: { objectFit: 'cover', transform: 'scale(1.4)' } }, // Pink
@@ -90,7 +90,7 @@ const Achievements = () => {
 
     const hackerrankBadges = [
         { title: 'SQL', description: 'Certified in SQL', color: '#64748b', image: '/hackerrank/sql.png' }, // Slate
-        { title: 'Java', description: 'Certified in Java', color: '#fbbf24', image: '/hackerrank/java.png' }, // Yellow
+        { title: 'Java', description: 'Certified in Java', color: '#78350f', image: '/hackerrank/java.png' }, // Coffee
         { title: 'C++', description: 'Certified in C++', color: '#3b82f6', image: '/hackerrank/cpp.png' }, // Blue
         { title: 'Problem Solving', description: 'Certified in Problem Solving', color: '#2dd4bf', image: '/hackerrank/problem-solving.png' } // Teal
     ];
@@ -107,7 +107,7 @@ const Achievements = () => {
                             alignItems: 'center',
                             gap: '10px',
                             padding: '0.8rem 2rem',
-                            background: '#fbbf24',
+                            background: '#78350f',
                             color: '#000',
                             borderRadius: '30px',
                             fontWeight: 700,

@@ -26,7 +26,7 @@ const SkillCard = ({ skill, index }) => {
         <div ref={cardRef} className="fade-in card-hover" style={{
             background: 'var(--bg-card)',
             borderRadius: '16px',
-            border: '1px solid var(--border-color)',
+            border: '2px solid var(--border-color)',
             padding: '2rem 1.5rem',
             display: 'flex',
             flexDirection: 'column',
@@ -63,7 +63,7 @@ const Skills = () => {
         { name: 'Git', icon: <FaGitAlt />, color: '#F05032' },
         { name: 'REST API', icon: <FaDatabase />, color: '#10b981' },
         { name: 'MySQL', icon: <FaDatabase />, color: '#4479A1' },
-        { name: 'DBMS', icon: <FaDatabase />, color: '#f59e0b' },
+        { name: 'DBMS', icon: <FaDatabase />, color: '#78350f' },
         { name: 'AWS', icon: <FaAws />, color: '#FF9900' },
         { name: 'Linux Admin', icon: <FaLinux />, color: '#FCC624' },
         { name: 'Networking', icon: <FaNetworkWired />, color: '#3b82f6' },

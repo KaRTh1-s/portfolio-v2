@@ -72,7 +72,7 @@ const About = () => {
                         background: 'var(--bg-card)',
                         padding: '2.5rem',
                         borderRadius: '16px',
-                        border: '1px solid var(--border-color)'
+                        border: '2px solid var(--border-color)'
                     }}>
                         <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             Hi! <span role="img" aria-label="wave">👋</span>
@@ -111,7 +111,7 @@ const About = () => {
                                 background: 'var(--bg-card)',
                                 padding: '2rem',
                                 borderRadius: '16px',
-                                border: '1px solid var(--border-color)',
+                                border: '2px solid var(--border-color)',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 gap: '1rem',

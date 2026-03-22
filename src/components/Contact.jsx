@@ -70,7 +70,7 @@ const Contact = () => {
                 left: '50%',
                 transform: 'translateX(-50%)',
                 background: 'var(--bg-card)',
-                border: '1px solid var(--border-color)',
+                border: '2px solid var(--border-color)',
                 padding: '1rem 1.5rem',
                 borderRadius: '8px',
                 display: 'flex',
@@ -105,7 +105,7 @@ const Contact = () => {
                         <div ref={leftRef} className="fade-in contact-info" style={{
                             background: 'var(--bg-card)',
                             borderRadius: '16px',
-                            border: '1px solid var(--border-color)',
+                            border: '2px solid var(--border-color)',
                             padding: '2rem',
                             display: 'flex',
                             flexDirection: 'column',
@@ -184,7 +184,7 @@ const Contact = () => {
                         <div ref={rightRef} className="fade-in contact-form-box" style={{
                             background: 'var(--bg-card)',
                             borderRadius: '16px',
-                            border: '1px solid var(--border-color)',
+                            border: '2px solid var(--border-color)',
                             padding: '2rem',
                             minWidth: 0
                         }}>
@@ -196,7 +196,7 @@ const Contact = () => {
                                     <input type="text" name="name" required placeholder="John Doe" style={{
                                         padding: '1rem',
                                         borderRadius: '8px',
-                                        border: '1px solid var(--border-color)',
+                                        border: '2px solid var(--border-color)',
                                         background: 'var(--bg-secondary)',
                                         color: 'var(--text-primary)',
                                         fontFamily: 'inherit'
@@ -208,7 +208,7 @@ const Contact = () => {
                                     <input type="email" name="email" required placeholder="john@example.com" style={{
                                         padding: '1rem',
                                         borderRadius: '8px',
-                                        border: '1px solid var(--border-color)',
+                                        border: '2px solid var(--border-color)',
                                         background: 'var(--bg-secondary)',
                                         color: 'var(--text-primary)',
                                         fontFamily: 'inherit'
@@ -220,7 +220,7 @@ const Contact = () => {
                                     <textarea name="message" required placeholder="Tell me about your project or how we can collaborate..." rows="5" style={{
                                         padding: '1rem',
                                         borderRadius: '8px',
-                                        border: '1px solid var(--border-color)',
+                                        border: '2px solid var(--border-color)',
                                         background: 'var(--bg-secondary)',
                                         color: 'var(--text-primary)',
                                         fontFamily: 'inherit',
@@ -250,7 +250,7 @@ const Contact = () => {
             </section>
 
             {/* Footer embedded within Contact file to simplify App.jsx */}
-            <footer style={{ background: 'var(--bg-card)', borderTop: '1px solid var(--border-color)', padding: '4rem 0 2rem', overflow: 'hidden', width: '100%' }}>
+            <footer style={{ background: 'var(--bg-card)', borderTop: '2px solid var(--border-color)', padding: '4rem 0 2rem', overflow: 'hidden', width: '100%' }}>
                 <div className="container">
                     <div className="footer-grid" style={{
                         display: 'grid',
@@ -321,7 +321,7 @@ const Contact = () => {
           width: 40px;
           height: 40px;
           border-radius: 8px;
-          border: 1px solid var(--border-color);
+          border: 2px solid var(--border-color);
           color: var(--text-primary);
           transition: transform 0.2s ease, opacity 0.2s ease;
         }

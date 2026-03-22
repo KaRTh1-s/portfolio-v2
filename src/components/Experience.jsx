@@ -44,7 +44,7 @@ const Experience = () => {
                     <div className="card-hover" style={{
                         background: 'var(--bg-card)',
                         borderRadius: '16px',
-                        border: '1px solid var(--border-color)',
+                        border: '2px solid var(--border-color)',
                         overflow: 'hidden'
                     }}>
                         {/* Top Area with Gradient */}
@@ -134,7 +134,7 @@ const Experience = () => {
                         flexDirection: 'column',
                         position: 'relative',
                         boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
-                        border: '1px solid var(--border-color)'
+                        border: '2px solid var(--border-color)'
                     }} onClick={e => e.stopPropagation()}>
 
                         {/* Modal Header */}

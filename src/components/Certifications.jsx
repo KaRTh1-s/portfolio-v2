@@ -25,7 +25,7 @@ const CertificationCard = ({ cert, index, onViewClick }) => {
         <div ref={cardRef} className="fade-in card-hover" style={{
             background: 'var(--bg-card)',
             borderRadius: '12px',
-            border: '1px solid var(--border-color)',
+            border: '2px solid var(--border-color)',
             padding: '2rem',
             position: 'relative',
             overflow: 'hidden',
@@ -106,13 +106,13 @@ const Certifications = () => {
         { title: 'IoT', issuer: 'Infosys', link: '/certs/iot.png', gradient: 'linear-gradient(135deg, #a855f7, #9333ea)' },
         { title: 'Java Foundation', issuer: 'Infosys', link: '/certs/java-foundation.jpg', gradient: 'linear-gradient(135deg, #ef4444, #dc2626)' },
         { title: 'Learnathon', issuer: 'ICT Academy', link: '/certs/learnathon.jpg', gradient: 'linear-gradient(135deg, #8b5cf6, #7c3aed)' },
-        { title: 'OOPs in Java', issuer: 'Great Learning', link: '/certs/oops-java.jpg', gradient: 'linear-gradient(135deg, #f59e0b, #d97706)' },
+        { name: 'OOPs in Java', issuer: 'Great Learning', link: '/certs/oops-java.jpg', gradient: 'linear-gradient(135deg, #78350f, #92400e)' },
         { title: 'Spring Boot', issuer: 'Infosys', link: '/certs/spring-boot.jpg', gradient: 'linear-gradient(135deg, #10b981, #059669)' },
         { title: 'WebServices Testing', issuer: 'Udemy', link: '/certs/webservices.png', gradient: 'linear-gradient(135deg, #14b8a6, #0f766e)' },
         { title: 'ChatGPT for Everyone', issuer: 'Guvi', link: '/certs/chatgpt.png', gradient: 'linear-gradient(135deg, #ec4899, #be185d)' },
         { title: 'Intro to Firewall', issuer: 'Great Learning', link: '/certs/firewall.jpg', gradient: 'linear-gradient(135deg, #64748b, #475569)' },
         { title: 'Intro to Cybersecurity', issuer: 'Cisco', link: '/certs/cybersecurity.png', gradient: 'linear-gradient(135deg, #2dd4bf, #0f766e)' },
-        { title: 'Mastering Prompt Eng', issuer: 'Udemy', link: '/certs/mastering-prompt.jpg', gradient: 'linear-gradient(135deg, #eab308, #a16207)' },
+        { title: 'Mastering Prompt Eng', issuer: 'Udemy', link: '/certs/mastering-prompt.jpg', gradient: 'linear-gradient(135deg, #a16207, #78350f)' },
         { title: 'Intro to Prompt Eng', issuer: 'Simplilearn', link: '/certs/intro-prompt.jpg', gradient: 'linear-gradient(135deg, #f43f5e, #be123c)' }
     ];
 

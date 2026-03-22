@@ -48,7 +48,7 @@ const Navbar = () => {
       zIndex: 1000,
       transition: 'all 0.3s ease',
       backgroundColor: isScrolled
-        ? (theme === 'dark' ? 'rgba(11, 17, 32, 0.95)' : 'rgba(243, 244, 246, 0.95)')
+        ? (theme === 'dark' ? 'rgba(11, 17, 32, 0.95)' : 'rgba(250, 250, 249, 0.95)')
         : 'transparent',
       backdropFilter: isScrolled ? 'blur(12px)' : 'none',
       borderBottom: isScrolled ? '1px solid var(--border-color)' : '1px solid transparent',
@@ -116,7 +116,7 @@ const Navbar = () => {
           maxHeight: isMenuOpen ? '600px' : '0',
           overflow: 'hidden',
           transition: 'max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
-          backgroundColor: theme === 'dark' ? 'rgba(11,17,32,0.98)' : 'rgba(248,249,252,0.98)',
+          backgroundColor: theme === 'dark' ? 'rgba(11,17,32,0.98)' : 'rgba(250, 250, 249, 0.98)',
           backdropFilter: 'blur(16px)',
           borderTop: isMenuOpen ? '1px solid var(--border-color)' : 'none',
         }}

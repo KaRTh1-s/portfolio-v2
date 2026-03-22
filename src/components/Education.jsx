@@ -25,7 +25,7 @@ const EducationItem = ({ index, data }) => {
         <div ref={itemRef} className="fade-in card-hover" style={{
             background: 'var(--bg-card)',
             borderRadius: '16px',
-            border: '1px solid var(--border-color)',
+            border: '2px solid var(--border-color)',
             overflow: 'hidden',
             marginBottom: '2rem'
         }}>
@@ -114,7 +114,7 @@ const EducationItem = ({ index, data }) => {
                         {data.results.map((res, i) => (
                             <div key={i} style={{
                                 background: 'rgba(0, 0, 0, 0.1)',
-                                border: '1px solid var(--border-color)',
+                                border: '2px solid var(--border-color)',
                                 padding: '1rem',
                                 borderRadius: '8px'
                             }}>
