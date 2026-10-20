@@ -10,75 +10,84 @@ const CertificationCard = ({ cert, index, onViewClick }) => {
                 if (entry.isIntersecting) {
                     setTimeout(() => {
                         entry.target.classList.add('visible');
-                    }, index * 40);
+                    }, index * 25);
                 }
             },
-            { threshold: 0.01, rootMargin: '50px' }
+            { threshold: 0.05, rootMargin: '40px' }
         );
-        if (cardRef.current) observer.observe(cardRef.current);
+        const currentEl = cardRef.current;
+        if (currentEl) observer.observe(currentEl);
         return () => {
-            if (cardRef.current) observer.unobserve(cardRef.current);
+            if (currentEl) observer.unobserve(currentEl);
         };
     }, [index]);
 
     return (
         <div ref={cardRef} className="fade-in card-hover" style={{
             background: 'var(--bg-card)',
-            borderRadius: '12px',
-            border: '2px solid var(--border-color)',
-            padding: '2rem',
+            borderRadius: '14px',
+            padding: '1.75rem',
             position: 'relative',
             overflow: 'hidden',
             display: 'flex',
             flexDirection: 'column',
             height: '100%'
         }}>
-            {/* Top Banner highlight */}
+            {/* Subtle top accent line */}
             <div style={{
                 position: 'absolute',
                 top: 0,
                 left: 0,
                 width: '100%',
-                height: '4px',
-                background: cert.gradient || 'var(--accent-gradient)'
-            }}></div>
+                height: '3px',
+                background: 'var(--accent-color)'
+            }} />
 
             <div style={{
-                width: '40px',
-                height: '40px',
+                width: '38px',
+                height: '38px',
                 borderRadius: '8px',
-                background: cert.gradient || 'var(--accent-gradient)',
+                background: 'var(--hover-primary)',
+                border: '1px solid var(--border-color)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                marginBottom: '1.5rem',
-                color: 'white'
+                marginBottom: '1.25rem',
+                color: 'var(--accent-color)'
             }}>
-                <Award size={20} />
+                <Award size={18} />
             </div>
 
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: '0.5rem' }}>{cert.title}</h3>
-            <p style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem', flex: 1 }}>{cert.issuer}</p>
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 600, marginBottom: '0.4rem', color: 'var(--text-primary)' }}>
+                {cert.title || cert.name}
+            </h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginBottom: '1.5rem', flex: 1 }}>
+                {cert.issuer}
+            </p>
 
             <div style={{
                 borderTop: '1px solid var(--border-color)',
-                paddingTop: '1rem',
-                marginTop: 'auto',
-                textAlign: 'center'
+                paddingTop: '0.85rem',
+                marginTop: 'auto'
             }}>
-                <button onClick={() => onViewClick(cert.link)} style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    color: 'var(--accent-color)',
-                    fontWeight: 600,
-                    fontSize: '0.95rem',
-                    transition: 'opacity 0.2s ease',
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer'
-                }} className="btn-hover">
-                    View Certificate <ExternalLink size={16} />
+                <button
+                    onClick={() => onViewClick(cert.link)}
+                    style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        color: 'var(--accent-color)',
+                        fontWeight: 600,
+                        fontSize: '0.875rem',
+                        transition: 'opacity 0.2s ease',
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: 0
+                    }}
+                    className="view-cert-btn"
+                >
+                    View Certificate <ExternalLink size={14} />
                 </button>
             </div>
         </div>
@@ -99,36 +108,36 @@ const Certifications = () => {
     }, [selectedCert]);
 
     const certs = [
-        { title: 'AWS Essentials', issuer: 'Amazon', link: '/certs/aws.jpg', gradient: 'linear-gradient(135deg, #f97316, #ea580c)' },
-        { title: 'CSS Crash Course', issuer: 'Udemy', link: '/certs/css.png', gradient: 'linear-gradient(135deg, #3b82f6, #2563eb)' },
-        { title: 'Connecting with IoT', issuer: 'Infosys', link: '/certs/iot-connecting.png', gradient: 'linear-gradient(135deg, #22c55e, #16a34a)' },
-        { title: 'Google Cloud Computing', issuer: 'Google', link: '/certs/google-cloud.jpg', gradient: 'linear-gradient(135deg, #06b6d4, #0891b2)' },
-        { title: 'IoT', issuer: 'Infosys', link: '/certs/iot.png', gradient: 'linear-gradient(135deg, #a855f7, #9333ea)' },
-        { title: 'Java Foundation', issuer: 'Infosys', link: '/certs/java-foundation.jpg', gradient: 'linear-gradient(135deg, #ef4444, #dc2626)' },
-        { title: 'Learnathon', issuer: 'ICT Academy', link: '/certs/learnathon.jpg', gradient: 'linear-gradient(135deg, #8b5cf6, #7c3aed)' },
-        { name: 'OOPs in Java', issuer: 'Great Learning', link: '/certs/oops-java.jpg', gradient: 'linear-gradient(135deg, #78350f, #92400e)' },
-        { title: 'Spring Boot', issuer: 'Infosys', link: '/certs/spring-boot.jpg', gradient: 'linear-gradient(135deg, #10b981, #059669)' },
-        { title: 'WebServices Testing', issuer: 'Udemy', link: '/certs/webservices.png', gradient: 'linear-gradient(135deg, #14b8a6, #0f766e)' },
-        { title: 'ChatGPT for Everyone', issuer: 'Guvi', link: '/certs/chatgpt.png', gradient: 'linear-gradient(135deg, #ec4899, #be185d)' },
-        { title: 'Intro to Firewall', issuer: 'Great Learning', link: '/certs/firewall.jpg', gradient: 'linear-gradient(135deg, #64748b, #475569)' },
-        { title: 'Intro to Cybersecurity', issuer: 'Cisco', link: '/certs/cybersecurity.png', gradient: 'linear-gradient(135deg, #2dd4bf, #0f766e)' },
-        { title: 'Mastering Prompt Eng', issuer: 'Udemy', link: '/certs/mastering-prompt.jpg', gradient: 'linear-gradient(135deg, #a16207, #78350f)' },
-        { title: 'Intro to Prompt Eng', issuer: 'Simplilearn', link: '/certs/intro-prompt.jpg', gradient: 'linear-gradient(135deg, #f43f5e, #be123c)' }
+        { title: 'AWS Essentials', issuer: 'Amazon', link: '/certs/aws.jpg' },
+        { title: 'CSS Crash Course', issuer: 'Udemy', link: '/certs/css.png' },
+        { title: 'Connecting with IoT', issuer: 'Infosys', link: '/certs/iot-connecting.png' },
+        { title: 'Google Cloud Computing', issuer: 'Google', link: '/certs/google-cloud.jpg' },
+        { title: 'IoT', issuer: 'Infosys', link: '/certs/iot.png' },
+        { title: 'Java Foundation', issuer: 'Infosys', link: '/certs/java-foundation.jpg' },
+        { title: 'Learnathon', issuer: 'ICT Academy', link: '/certs/learnathon.jpg' },
+        { title: 'OOPs in Java', issuer: 'Great Learning', link: '/certs/oops-java.jpg' },
+        { title: 'Spring Boot', issuer: 'Infosys', link: '/certs/spring-boot.jpg' },
+        { title: 'WebServices Testing', issuer: 'Udemy', link: '/certs/webservices.png' },
+        { title: 'ChatGPT for Everyone', issuer: 'Guvi', link: '/certs/chatgpt.png' },
+        { title: 'Intro to Firewall', issuer: 'Great Learning', link: '/certs/firewall.jpg' },
+        { title: 'Intro to Cybersecurity', issuer: 'Cisco', link: '/certs/cybersecurity.png' },
+        { title: 'Mastering Prompt Eng', issuer: 'Udemy', link: '/certs/mastering-prompt.jpg' },
+        { title: 'Intro to Prompt Eng', issuer: 'Simplilearn', link: '/certs/intro-prompt.jpg' }
     ];
 
     return (
         <section id="certifications" className="section" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div className="container">
-                <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-                    <h2 style={{ fontSize: '2.5rem', fontWeight: 700, display: 'inline-block' }} className="gradient-text">Certifications</h2>
-                    <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>Continuous learning and professional development</p>
-                    <div style={{ width: '60px', height: '4px', background: 'var(--accent-gradient)', margin: '1rem auto 0', borderRadius: '2px' }}></div>
+                <div className="section-header">
+                    <h2 className="section-title">Certifications</h2>
+                    <div className="teal-divider" />
+                    <p className="section-subtitle">Continuous learning and professional development</p>
                 </div>
 
                 <div className="certs-grid" style={{
                     display: 'grid',
                     gridTemplateColumns: 'repeat(3, 1fr)',
-                    gap: '2rem',
+                    gap: '1.5rem',
                     maxWidth: '1100px',
                     margin: '0 auto'
                 }}>
@@ -140,68 +149,94 @@ const Certifications = () => {
 
             {/* Certificate Modal */}
             {selectedCert && (
-                <div className="cert-modal-overlay" style={{
+                <div style={{
                     position: 'fixed',
                     top: 0,
                     left: 0,
                     width: '100vw',
                     height: '100vh',
-                    background: 'rgba(0, 0, 0, 0.85)',
-                    backdropFilter: 'blur(4px)',
+                    background: 'rgba(25, 44, 43, 0.75)',
+                    backdropFilter: 'blur(6px)',
                     zIndex: 9999,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: '1rem',
+                    padding: '1.5rem',
                     boxSizing: 'border-box'
                 }} onClick={() => setSelectedCert(null)}>
                     <div style={{
                         background: 'var(--bg-card)',
                         width: '100%',
-                        maxWidth: '900px',
+                        maxWidth: '920px',
                         maxHeight: '90vh',
                         borderRadius: '16px',
                         overflow: 'hidden',
                         display: 'flex',
                         flexDirection: 'column',
                         position: 'relative',
-                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+                        boxShadow: '0 20px 40px rgba(0, 0, 0, 0.25)',
                         border: '1px solid var(--border-color)'
                     }} onClick={e => e.stopPropagation()}>
 
                         {/* Modal Header */}
                         <div style={{
-                            padding: '1rem 1.5rem',
+                            padding: '1.1rem 1.5rem',
                             borderBottom: '1px solid var(--border-color)',
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center',
                             background: 'var(--bg-secondary)'
                         }}>
-                            <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 600 }}>Certificate Viewer</h3>
-                            <button onClick={() => setSelectedCert(null)} style={{
-                                background: 'rgba(239, 68, 68, 0.1)',
-                                color: '#ef4444',
-                                border: 'none',
-                                borderRadius: '50%',
-                                width: '36px',
-                                height: '36px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s ease'
-                            }} className="btn-hover" aria-label="Close modal">
-                                <X size={20} />
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Award size={18} color="var(--accent-color)" />
+                                <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+                                    Certificate Viewer
+                                </h3>
+                            </div>
+                            <button
+                                onClick={() => setSelectedCert(null)}
+                                style={{
+                                    background: 'var(--bg-card)',
+                                    color: 'var(--text-secondary)',
+                                    border: '1px solid var(--border-color)',
+                                    borderRadius: '50%',
+                                    width: '32px',
+                                    height: '32px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease'
+                                }}
+                                aria-label="Close modal"
+                            >
+                                <X size={18} />
                             </button>
                         </div>
 
-                        {/* Modal Body - local image viewer */}
-                        <div style={{ flex: 1, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: '0.75rem', minHeight: 0 }}>
+                        {/* Modal Body */}
+                        <div style={{
+                            flex: 1,
+                            background: '#0D1615',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            overflow: 'auto',
+                            padding: '1rem',
+                            minHeight: 0
+                        }}>
                             <img
                                 src={selectedCert}
                                 alt="Certificate Document"
-                                style={{ maxWidth: '100%', maxHeight: '100%', width: 'auto', height: 'auto', objectFit: 'contain', borderRadius: '4px', display: 'block' }}
+                                style={{
+                                    maxWidth: '100%',
+                                    maxHeight: '100%',
+                                    width: 'auto',
+                                    height: 'auto',
+                                    objectFit: 'contain',
+                                    borderRadius: '6px',
+                                    boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
+                                }}
                             />
                         </div>
                     </div>
@@ -210,20 +245,16 @@ const Certifications = () => {
 
             <style dangerouslySetInnerHTML={{
                 __html: `
-        @media (max-width: 900px) {
-          .certs-grid { grid-template-columns: repeat(2, 1fr) !important; }
-        }
-        @media (max-width: 600px) {
-          .certs-grid { grid-template-columns: 1fr !important; }
-        }
-        @media (max-width: 768px) {
-          .cert-modal-overlay {
-            padding: 0.75rem !important;
-            align-items: flex-start !important;
-            padding-top: 4rem !important;
-          }
-        }
-      `}} />
+                .view-cert-btn:hover {
+                    opacity: 0.8;
+                }
+                @media (max-width: 960px) {
+                    .certs-grid { grid-template-columns: repeat(2, 1fr) !important; }
+                }
+                @media (max-width: 600px) {
+                    .certs-grid { grid-template-columns: 1fr !important; }
+                }
+            ` }} />
         </section>
     );
 };

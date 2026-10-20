@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Briefcase, Calendar, MapPin, Award, X } from 'lucide-react';
+import { Briefcase, Calendar, MapPin, Award, X, Sparkles } from 'lucide-react';
 
 const Experience = () => {
     const containerRef = useRef(null);
@@ -22,84 +22,105 @@ const Experience = () => {
                     entry.target.classList.add('visible');
                 }
             },
-            { threshold: 0.01, rootMargin: '100px' }
+            { threshold: 0.05, rootMargin: '60px' }
         );
-        if (containerRef.current) {
-            observer.observe(containerRef.current);
+        const currentEl = containerRef.current;
+        if (currentEl) {
+            observer.observe(currentEl);
         }
         return () => {
-            if (containerRef.current) observer.unobserve(containerRef.current);
+            if (currentEl) observer.unobserve(currentEl);
         };
     }, []);
 
     return (
         <section id="experience" className="section" style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div className="container">
-                <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-                    <h2 style={{ fontSize: '2.5rem', fontWeight: 700, display: 'inline-block' }} className="gradient-text">Experience</h2>
-                    <div style={{ width: '60px', height: '4px', background: 'var(--accent-gradient)', margin: '0.5rem auto 0', borderRadius: '2px' }}></div>
+                <div className="section-header">
+                    <h2 className="section-title">Experience</h2>
+                    <div className="teal-divider" />
                 </div>
 
-                <div ref={containerRef} className="fade-in" style={{ maxWidth: '800px', margin: '0 auto' }}>
+                <div ref={containerRef} className="fade-in" style={{ maxWidth: '820px', margin: '0 auto' }}>
                     <div className="card-hover" style={{
-                        background: 'var(--bg-card)',
                         borderRadius: '16px',
-                        border: '2px solid var(--border-color)',
-                        overflow: 'hidden'
+                        overflow: 'hidden',
+                        padding: '2.5rem'
                     }}>
-                        {/* Top Area with Gradient */}
+                        {/* Clean Xellara-inspired header layout (no purple-blue gradient banner) */}
                         <div style={{
-                            background: 'linear-gradient(135deg, #a855f7, #3b82f6)', // Purple to Blue
-                            padding: '2rem',
-                            color: 'white',
                             display: 'flex',
                             gap: '1.5rem',
-                            alignItems: 'flex-start'
+                            alignItems: 'flex-start',
+                            flexWrap: 'wrap'
                         }}>
                             <div style={{
-                                background: 'rgba(255, 255, 255, 0.2)',
-                                padding: '1rem',
+                                width: '52px',
+                                height: '52px',
                                 borderRadius: '12px',
-                                backdropFilter: 'blur(5px)'
+                                background: 'var(--hover-primary)',
+                                border: '1px solid var(--border-color)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: 'var(--accent-color)',
+                                flexShrink: 0
                             }}>
-                                <Briefcase size={32} color="white" />
+                                <Briefcase size={26} />
                             </div>
-                            <div style={{ flex: 1 }}>
-                                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, margin: 0, color: 'white' }}>Java Developer Intern</h3>
-                                <h4 style={{ fontSize: '1.2rem', fontWeight: 500, opacity: 0.9, marginTop: '4px' }}>Infosys</h4>
-                                <p style={{ marginTop: '0.5rem', opacity: 0.8, fontSize: '0.95rem' }}>Infosys Springboard - Internship</p>
 
-                                <div style={{ display: 'flex', gap: '1.5rem', marginTop: '1rem', flexWrap: 'wrap' }}>
-                                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.9rem', opacity: 0.8 }}>
-                                        <Calendar size={16} /> Mar 2025 - Apr 2025 · 2 months
+                            <div style={{ flex: 1, minWidth: '260px' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '0.4rem' }}>
+                                    <h3 style={{ fontSize: '1.5rem', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>
+                                        Java Developer Intern
+                                    </h3>
+                                </div>
+
+                                <h4 style={{ fontSize: '1.15rem', fontWeight: 600, color: 'var(--accent-color)', margin: '0 0 0.35rem' }}>
+                                    Infosys
+                                </h4>
+                                <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', margin: 0 }}>
+                                    Infosys Springboard - Internship
+                                </p>
+
+                                {/* Tag Badges inspired by Xellara reference */}
+                                <div style={{ display: 'flex', gap: '0.65rem', flexWrap: 'wrap', marginTop: '1.25rem', marginBottom: '1.25rem' }}>
+                                    <span className="ref-pill">
+                                        <Briefcase size={14} color="var(--accent-color)" /> Internship
                                     </span>
-                                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.9rem', opacity: 0.8 }}>
-                                        <MapPin size={16} /> Coimbatore, Tamil Nadu, India · Remote
+                                    <span className="ref-pill">
+                                        <MapPin size={14} color="var(--accent-color)" /> Remote
                                     </span>
+                                    <span className="ref-pill">
+                                        <Calendar size={14} color="var(--accent-color)" /> Mar 2025 - Apr 2025 · 2 months
+                                    </span>
+                                </div>
+
+                                <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                                    <MapPin size={15} style={{ verticalAlign: 'middle', marginRight: '6px', color: 'var(--accent-color)' }} />
+                                    Coimbatore, Tamil Nadu, India · Remote
                                 </div>
                             </div>
                         </div>
 
-                        {/* Bottom Actions Area */}
+                        {/* Certificate Action Area */}
                         <div style={{
-                            padding: '1.5rem 2rem',
-                            background: 'var(--bg-secondary)',
+                            marginTop: '2rem',
+                            paddingTop: '1.5rem',
+                            borderTop: '1px solid var(--border-color)',
                             display: 'flex',
-                            justifyContent: 'center'
+                            justifyContent: 'flex-start',
+                            alignItems: 'center'
                         }}>
-                            <button onClick={() => setSelectedCert("/certs/internship.jpg")} style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                padding: '0.8rem 1.5rem',
-                                borderRadius: '8px',
-                                color: 'white',
-                                fontWeight: 600,
-                                transition: 'transform 0.2s ease, opacity 0.2s ease',
-                                border: 'none',
-                                cursor: 'pointer'
-                            }} className="gradient-bg btn-hover">
-                                <Award size={18} /> View Certificate
+                            <button
+                                onClick={() => setSelectedCert("/certs/internship.jpg")}
+                                className="btn-primary"
+                                style={{
+                                    padding: '0.65rem 1.4rem',
+                                    fontSize: '0.9rem'
+                                }}
+                            >
+                                <Award size={17} /> View Certificate
                             </button>
                         </div>
                     </div>
@@ -114,75 +135,93 @@ const Experience = () => {
                     left: 0,
                     width: '100vw',
                     height: '100vh',
-                    background: 'rgba(0, 0, 0, 0.85)',
-                    backdropFilter: 'blur(4px)',
+                    background: 'rgba(25, 44, 43, 0.75)',
+                    backdropFilter: 'blur(6px)',
                     zIndex: 9999,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: '1rem',
+                    padding: '1.5rem',
                     boxSizing: 'border-box'
                 }} onClick={() => setSelectedCert(null)}>
                     <div style={{
                         background: 'var(--bg-card)',
                         width: '100%',
-                        maxWidth: '900px',
+                        maxWidth: '920px',
                         maxHeight: '90vh',
                         borderRadius: '16px',
                         overflow: 'hidden',
                         display: 'flex',
                         flexDirection: 'column',
                         position: 'relative',
-                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
-                        border: '2px solid var(--border-color)'
+                        boxShadow: '0 20px 40px rgba(0, 0, 0, 0.25)',
+                        border: '1px solid var(--border-color)'
                     }} onClick={e => e.stopPropagation()}>
 
                         {/* Modal Header */}
                         <div style={{
-                            padding: '1rem 1.5rem',
+                            padding: '1.1rem 1.5rem',
                             borderBottom: '1px solid var(--border-color)',
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center',
                             background: 'var(--bg-secondary)'
                         }}>
-                            <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 600 }}>Certificate Viewer</h3>
-                            <button onClick={() => setSelectedCert(null)} style={{
-                                background: 'rgba(239, 68, 68, 0.1)',
-                                color: '#ef4444',
-                                border: 'none',
-                                borderRadius: '50%',
-                                width: '36px',
-                                height: '36px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s ease'
-                            }} className="btn-hover" aria-label="Close modal">
-                                <X size={20} />
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <Award size={18} color="var(--accent-color)" />
+                                <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+                                    Certificate Viewer - Infosys Springboard
+                                </h3>
+                            </div>
+                            <button
+                                onClick={() => setSelectedCert(null)}
+                                style={{
+                                    background: 'var(--bg-card)',
+                                    color: 'var(--text-secondary)',
+                                    border: '1px solid var(--border-color)',
+                                    borderRadius: '50%',
+                                    width: '32px',
+                                    height: '32px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease'
+                                }}
+                                aria-label="Close modal"
+                            >
+                                <X size={18} />
                             </button>
                         </div>
 
-                        {/* Modal Body - local image viewer */}
-                        <div style={{ flex: 1, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', padding: '0.75rem', minHeight: 0 }}>
+                        {/* Modal Body */}
+                        <div style={{
+                            flex: 1,
+                            background: '#0D1615',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            overflow: 'auto',
+                            padding: '1rem',
+                            minHeight: 0
+                        }}>
                             <img
                                 src={selectedCert}
-                                alt="Certificate Document"
-                                style={{ maxWidth: '100%', maxHeight: '100%', width: 'auto', height: 'auto', objectFit: 'contain', borderRadius: '4px', display: 'block' }}
+                                alt="Infosys Internship Certificate"
+                                style={{
+                                    maxWidth: '100%',
+                                    maxHeight: '100%',
+                                    width: 'auto',
+                                    height: 'auto',
+                                    objectFit: 'contain',
+                                    borderRadius: '6px',
+                                    boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
+                                }}
                             />
                         </div>
                     </div>
                 </div>
             )}
-
-            <style dangerouslySetInnerHTML={{
-                __html: `
-        .btn-hover:hover {
-          transform: translateY(-2px);
-          opacity: 0.9;
-        }
-      `}} />
         </section>
     );
 };

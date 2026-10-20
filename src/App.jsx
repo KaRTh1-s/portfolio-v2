@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -9,32 +9,52 @@ import Skills from './components/Skills';
 import Certifications from './components/Certifications';
 import Achievements from './components/Achievements';
 import Contact from './components/Contact';
+import ParticleIntro from './components/ParticleIntro';
+import CursorGlow from './components/CursorGlow';
 
 function App() {
-
-  useEffect(() => {
-    // Initial theme setup (dark mode by default handled in CSS/Navbar)
-
-    // Interactive Glow Effect for Cards
-    const handleMouseMove = (e) => {
-      document.querySelectorAll('.card-hover').forEach(card => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        card.style.setProperty('--mouse-x', `${x}px`);
-        card.style.setProperty('--mouse-y', `${y}px`);
-      });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  const [introFinished, setIntroFinished] = useState(() => {
+    // If intro was already shown in this browser session or direct section link accessed, skip intro
+    if (typeof window !== 'undefined') {
+      const seen = sessionStorage.getItem('portfolio_intro_seen') === 'true';
+      const hasHash = window.location.hash.length > 1;
+      const prefersReduced = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+      return seen || hasHash || prefersReduced;
+    }
+    return false;
+  });
 
   return (
-    <div className="app-container" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', overflowX: 'hidden', width: '100%' }}>
+    <div
+      className="app-container"
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        overflowX: 'hidden',
+        width: '100%',
+        position: 'relative'
+      }}
+    >
+      {/* Feature 1: Full-Screen 3D Particle Intro with Convergence Reveal */}
+      {!introFinished && (
+        <ParticleIntro onComplete={() => setIntroFinished(true)} />
+      )}
+
+      {/* Feature 2: Subtle Theme-Aware Cursor Glow */}
+      <CursorGlow />
+
       <Navbar />
 
-      <main style={{ flex: 1, overflowX: 'hidden', width: '100%' }}>
+      <main
+        style={{
+          flex: 1,
+          overflowX: 'hidden',
+          width: '100%',
+          opacity: introFinished ? 1 : 0.95,
+          transition: 'opacity 0.6s ease',
+        }}
+      >
         <Hero />
         <About />
         <Education />

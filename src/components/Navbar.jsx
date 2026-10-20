@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Moon, Sun, Menu, X, Home, User, GraduationCap, Briefcase, FolderOpen, Code2, Mail } from 'lucide-react';
+import { Moon, Sun, Menu, X, Home, User, GraduationCap, Briefcase, FolderOpen, Code2, Mail, Award } from 'lucide-react';
 
 const Navbar = () => {
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('portfolio-theme') || 'light';
+  });
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 15);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('portfolio-theme', theme);
   }, [theme]);
 
   // Close menu on resize to desktop
@@ -27,7 +30,7 @@ const Navbar = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
+  const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
 
   const navLinks = [
     { name: 'Home', href: '#home', icon: Home },
@@ -46,47 +49,75 @@ const Navbar = () => {
       left: 0,
       right: 0,
       zIndex: 1000,
-      transition: 'all 0.3s ease',
+      transition: 'all 0.25s ease',
       backgroundColor: isScrolled
-        ? (theme === 'dark' ? 'rgba(11, 17, 32, 0.95)' : 'rgba(250, 250, 249, 0.95)')
+        ? (theme === 'dark' ? 'rgba(15, 23, 22, 0.94)' : 'rgba(250, 249, 247, 0.94)')
         : 'transparent',
-      backdropFilter: isScrolled ? 'blur(12px)' : 'none',
+      backdropFilter: isScrolled ? 'blur(10px)' : 'none',
       borderBottom: isScrolled ? '1px solid var(--border-color)' : '1px solid transparent',
     }}>
-      {/* Top bar */}
       <div className="container" style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: '0.85rem 1.5rem',
+        padding: '0.9rem 1.5rem',
       }}>
-        <a href="#home" style={{ fontSize: '1.5rem', fontWeight: 'bold', flexShrink: 0 }} className="gradient-text">
-          Portfolio.
+        {/* Brand */}
+        <a href="#home" style={{
+          fontSize: '1.4rem',
+          fontWeight: 700,
+          color: 'var(--text-primary)',
+          letterSpacing: '-0.02em',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '2px'
+        }}>
+          Portfolio<span style={{ color: 'var(--accent-color)' }}>.</span>
         </a>
 
         {/* Desktop Links */}
-        <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }} className="desktop-menu">
+        <div style={{ display: 'flex', gap: '1.75rem', alignItems: 'center' }} className="desktop-menu">
           {navLinks.map((link) => (
-            <a key={link.name} href={link.href} style={{ fontWeight: 500 }} className="nav-link">
+            <a
+              key={link.name}
+              href={link.href}
+              style={{
+                fontSize: '0.925rem',
+                fontWeight: 500,
+                color: 'var(--text-primary)',
+                transition: 'color 0.2s ease'
+              }}
+              className="nav-link"
+            >
               {link.name}
             </a>
           ))}
-          <button onClick={toggleTheme} className="theme-btn" aria-label="Toggle theme" style={{
-            padding: '0.45rem',
-            borderRadius: '50%',
-            backgroundColor: 'var(--bg-card)',
-            color: 'var(--text-primary)',
-            border: '1px solid var(--border-color)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0
-          }}>
-            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+
+          {/* Theme Toggle Button */}
+          <button
+            onClick={toggleTheme}
+            className="theme-btn"
+            aria-label="Toggle theme"
+            style={{
+              width: '38px',
+              height: '38px',
+              borderRadius: '50%',
+              backgroundColor: 'var(--bg-card)',
+              color: 'var(--text-primary)',
+              border: '1px solid var(--border-color)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+              cursor: 'pointer',
+              transition: 'border-color 0.2s ease, transform 0.2s ease, background-color 0.2s ease'
+            }}
+          >
+            {theme === 'dark' ? <Sun size={17} color="var(--accent-color)" /> : <Moon size={17} />}
           </button>
         </div>
 
-        {/* Mobile Hamburger only */}
+        {/* Mobile Hamburger */}
         <button
           className="mobile-toggle"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -95,13 +126,14 @@ const Navbar = () => {
             display: 'none',
             alignItems: 'center',
             justifyContent: 'center',
-            width: '40px',
-            height: '40px',
-            borderRadius: '10px',
-            backgroundColor: isMenuOpen ? 'var(--accent-color)' : 'var(--bg-card)',
-            color: isMenuOpen ? '#fff' : 'var(--text-primary)',
+            width: '38px',
+            height: '38px',
+            borderRadius: '8px',
+            backgroundColor: 'var(--bg-card)',
+            color: 'var(--text-primary)',
             border: '1px solid var(--border-color)',
             flexShrink: 0,
+            cursor: 'pointer',
             transition: 'all 0.2s ease'
           }}
         >
@@ -109,21 +141,21 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Full Dropdown */}
+      {/* Mobile Drawer */}
       <div
         className="mobile-drawer"
         style={{
-          maxHeight: isMenuOpen ? '600px' : '0',
+          maxHeight: isMenuOpen ? '500px' : '0',
           overflow: 'hidden',
-          transition: 'max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
-          backgroundColor: theme === 'dark' ? 'rgba(11,17,32,0.98)' : 'rgba(250, 250, 249, 0.98)',
-          backdropFilter: 'blur(16px)',
+          transition: 'max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          backgroundColor: theme === 'dark' ? 'rgba(15, 23, 22, 0.98)' : 'rgba(250, 249, 247, 0.98)',
+          backdropFilter: 'blur(12px)',
           borderTop: isMenuOpen ? '1px solid var(--border-color)' : 'none',
+          boxShadow: isMenuOpen ? '0 10px 25px rgba(0,0,0,0.05)' : 'none'
         }}
       >
-        <div style={{ padding: '1rem 1.5rem 1.25rem' }}>
-          {/* Nav Links */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', marginBottom: '1rem' }}>
+        <div style={{ padding: '1rem 1.25rem 1.25rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', marginBottom: '1rem' }}>
             {navLinks.map((link) => {
               const Icon = link.icon;
               return (
@@ -134,22 +166,25 @@ const Navbar = () => {
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.85rem',
-                    padding: '0.75rem 1rem',
-                    borderRadius: '10px',
+                    gap: '0.75rem',
+                    padding: '0.65rem 0.85rem',
+                    borderRadius: '8px',
                     color: 'var(--text-primary)',
                     fontWeight: 500,
-                    fontSize: '1rem',
+                    fontSize: '0.95rem',
                     textDecoration: 'none',
-                    transition: 'background 0.18s ease, color 0.18s ease',
+                    transition: 'background 0.15s ease, color 0.15s ease',
                   }}
                   className="mobile-nav-link"
                 >
                   <span style={{
-                    width: '34px', height: '34px',
-                    borderRadius: '8px',
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '6px',
                     background: 'var(--hover-primary)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     color: 'var(--accent-color)',
                     flexShrink: 0,
                   }}>
@@ -161,30 +196,30 @@ const Navbar = () => {
             })}
           </div>
 
-          {/* Divider + Theme Row */}
           <div style={{
             borderTop: '1px solid var(--border-color)',
-            paddingTop: '1rem',
+            paddingTop: '0.85rem',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-            <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
               {theme === 'dark' ? 'Dark Mode' : 'Light Mode'}
             </span>
             <button onClick={toggleTheme} style={{
-              display: 'flex', alignItems: 'center', gap: '6px',
-              padding: '0.45rem 1rem',
-              borderRadius: '20px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '0.4rem 0.85rem',
+              borderRadius: '9999px',
               backgroundColor: 'var(--bg-card)',
               color: 'var(--text-primary)',
               border: '1px solid var(--border-color)',
-              fontSize: '0.85rem',
+              fontSize: '0.825rem',
               fontWeight: 500,
               cursor: 'pointer',
-              transition: 'all 0.2s ease',
             }}>
-              {theme === 'dark' ? <><Sun size={15} /> Light</> : <><Moon size={15} /> Dark</>}
+              {theme === 'dark' ? <><Sun size={14} color="var(--accent-color)" /> Light</> : <><Moon size={14} /> Dark</>}
             </button>
           </div>
         </div>
@@ -205,7 +240,10 @@ const Navbar = () => {
           background: var(--hover-primary) !important;
           color: var(--accent-color) !important;
         }
-        .theme-btn:hover { opacity: 0.85; }
+        .theme-btn:hover {
+          border-color: var(--accent-color) !important;
+          transform: scale(1.05);
+        }
       ` }} />
     </nav>
   );

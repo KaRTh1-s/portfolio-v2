@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import { FaGithub, FaLinkedin, FaCoffee } from 'react-icons/fa';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { SiLeetcode } from 'react-icons/si';
+import { Sparkles, MapPin, Briefcase } from 'lucide-react';
 
 const Hero = () => {
     const containerRef = useRef(null);
@@ -12,87 +13,182 @@ const Hero = () => {
                     entry.target.classList.add('visible');
                 }
             },
-            { threshold: 0.1 }
+            { threshold: 0.05 }
         );
 
-        if (containerRef.current) {
-            observer.observe(containerRef.current);
+        const currentEl = containerRef.current;
+        if (currentEl) {
+            observer.observe(currentEl);
         }
 
         return () => {
-            if (containerRef.current) observer.unobserve(containerRef.current);
+            if (currentEl) observer.unobserve(currentEl);
         };
     }, []);
 
     return (
-        <section id="home" className="section" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', paddingTop: '80px' }}>
-            <div className="container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-                <div ref={containerRef} className="fade-in" style={{ maxWidth: '800px' }}>
-                    <h2 style={{ fontSize: '1.5rem', color: 'var(--accent-color)', marginBottom: '1rem', fontWeight: 600 }}>
-                        Hello, I am
-                    </h2>
-                    <h1 style={{ fontSize: '4rem', fontWeight: 800, marginBottom: '1rem', lineHeight: 1.2 }}>
-                        Karthikeyan S<br />
-                        <span className="gradient-text">Full Stack Developer</span>
+        <section id="home" className="section" style={{
+            minHeight: '92vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingTop: '110px',
+            paddingBottom: '4rem',
+            position: 'relative',
+            overflow: 'hidden'
+        }}>
+            <div className="container">
+                <div
+                    ref={containerRef}
+                    className="fade-in hero-container"
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                        maxWidth: '820px',
+                        margin: '0 auto',
+                        position: 'relative',
+                        zIndex: 2,
+                    }}
+                >
+                    {/* Reference-style subtle status badge */}
+                    <div className="ref-pill" style={{ marginBottom: '1.5rem', gap: '8px' }}>
+                        <span style={{
+                            width: '8px',
+                            height: '8px',
+                            borderRadius: '50%',
+                            backgroundColor: 'var(--accent-color)',
+                            display: 'inline-block'
+                        }} />
+                        <span style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>Hello, I am</span>
+                    </div>
+
+                    {/* Name and Professional Title */}
+                    <h1 style={{
+                        fontSize: 'clamp(2.75rem, 6vw, 4.25rem)',
+                        fontWeight: 800,
+                        lineHeight: 1.15,
+                        color: 'var(--text-primary)',
+                        letterSpacing: '-0.03em',
+                        marginBottom: '0.65rem'
+                    }}>
+                        Karthikeyan S
                     </h1>
-                    <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', marginBottom: '2rem', maxWidth: '600px', margin: '0 auto 2rem' }}>
+
+                    <h2 style={{
+                        fontSize: 'clamp(1.35rem, 3vw, 2rem)',
+                        fontWeight: 600,
+                        color: 'var(--accent-color)',
+                        marginBottom: '1rem',
+                        letterSpacing: '-0.015em'
+                    }}>
+                        Full Stack Developer
+                    </h2>
+
+                    {/* Short teal accent line beneath the principal heading */}
+                    <div style={{
+                        width: '52px',
+                        height: '3px',
+                        backgroundColor: 'var(--accent-color)',
+                        borderRadius: '2px',
+                        marginBottom: '1.75rem'
+                    }} />
+
+                    {/* Description */}
+                    <p style={{
+                        fontSize: '1.15rem',
+                        color: 'var(--text-secondary)',
+                        lineHeight: 1.7,
+                        maxWidth: '620px',
+                        marginBottom: '2rem'
+                    }}>
                         Passionate about creating amazing web experiences, solving complex problems, and building scalable applications.
                     </p>
 
-                    <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '3rem' }}>
-                        <a href="#contact" style={{
-                            padding: '0.8rem 2rem',
-                            borderRadius: '8px',
-                            fontWeight: 600,
-                            display: 'inline-block',
-                            transition: 'transform 0.2s ease, opacity 0.2s ease'
-                        }} className="gradient-bg btn-hover">
+                    {/* Role Tags inspired by reference pills */}
+                    <div style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        justifyContent: 'center',
+                        gap: '0.65rem',
+                        marginBottom: '2.5rem'
+                    }}>
+                        <span className="ref-pill">
+                            <Briefcase size={14} color="var(--accent-color)" /> Full Stack & Backend
+                        </span>
+                        <span className="ref-pill">
+                            <MapPin size={14} color="var(--accent-color)" /> Coimbatore, India
+                        </span>
+                        <span className="ref-pill">
+                            <Sparkles size={14} color="var(--accent-color)" /> Java · Spring Boot · React
+                        </span>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '2.5rem' }}>
+                        <a href="#contact" className="btn-primary">
                             Let's Connect
                         </a>
-                        <a href="#projects" style={{
-                            padding: '0.8rem 2rem',
-                            borderRadius: '8px',
-                            fontWeight: 600,
-                            display: 'inline-block',
-                            backgroundColor: 'var(--bg-card)',
-                            border: '1px solid var(--border-color)',
-                            transition: 'transform 0.2s ease'
-                        }} className="btn-hover">
+                        <a href="#projects" className="btn-outline">
                             View Work
                         </a>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
-                        <a href="https://github.com/KaRTh1-s" target="_blank" rel="noopener noreferrer" className="social-icon">
-                            <FaGithub size={28} />
+                    {/* Social Icons */}
+                    <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center', justifyContent: 'center' }}>
+                        <a
+                            href="https://github.com/KaRTh1-s"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hero-social-link"
+                            aria-label="GitHub"
+                        >
+                            <FaGithub size={22} />
                         </a>
-                        <a href="https://www.linkedin.com/in/karthikeyan-s-86457b290" target="_blank" rel="noopener noreferrer" className="social-icon">
-                            <FaLinkedin size={28} />
+                        <a
+                            href="https://www.linkedin.com/in/karthikeyan-s-86457b290"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hero-social-link"
+                            aria-label="LinkedIn"
+                        >
+                            <FaLinkedin size={22} />
                         </a>
-                        <a href="https://leetcode.com/u/K_a_R_T_h_I/" target="_blank" rel="noopener noreferrer" className="social-icon">
-                            <SiLeetcode size={28} />
+                        <a
+                            href="https://leetcode.com/u/K_a_R_T_h_I/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hero-social-link"
+                            aria-label="LeetCode"
+                        >
+                            <SiLeetcode size={22} />
                         </a>
                     </div>
                 </div>
             </div>
+
             <style dangerouslySetInnerHTML={{
                 __html: `
-        .social-icon {
-          color: var(--text-secondary);
-          transition: color 0.3s ease, transform 0.3s ease;
-        }
-        .social-icon:hover {
-          color: var(--accent-color);
-          transform: translateY(-3px);
-        }
-        .btn-hover:hover {
-          transform: translateY(-2px);
-          opacity: 0.9;
-        }
-        @media (max-width: 768px) {
-          h1 { font-size: 2.5rem !important; }
-        }
-      `}} />
+                .hero-social-link {
+                    color: var(--text-secondary);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 42px;
+                    height: 42px;
+                    border-radius: 10px;
+                    border: 1px solid var(--border-color);
+                    background: var(--bg-card);
+                    transition: all 0.2s ease;
+                }
+                .hero-social-link:hover {
+                    color: var(--accent-color);
+                    border-color: var(--accent-color);
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(0, 127, 120, 0.18);
+                }
+            ` }} />
         </section>
     );
 };

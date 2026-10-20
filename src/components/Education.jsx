@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { GraduationCap, MapPin, Calendar, Check } from 'lucide-react';
+import { GraduationCap, MapPin, Calendar, Check, Trophy } from 'lucide-react';
 
 const EducationItem = ({ index, data }) => {
     const itemRef = useRef(null);
@@ -10,14 +10,15 @@ const EducationItem = ({ index, data }) => {
                 if (entry.isIntersecting) {
                     setTimeout(() => {
                         entry.target.classList.add('visible');
-                    }, index * 50); // Stagger animation
+                    }, index * 40);
                 }
             },
-            { threshold: 0.01, rootMargin: '100px' }
+            { threshold: 0.05, rootMargin: '60px' }
         );
-        if (itemRef.current) observer.observe(itemRef.current);
+        const currentEl = itemRef.current;
+        if (currentEl) observer.observe(currentEl);
         return () => {
-            if (itemRef.current) observer.unobserve(itemRef.current);
+            if (currentEl) observer.unobserve(currentEl);
         };
     }, [index]);
 
@@ -25,101 +26,145 @@ const EducationItem = ({ index, data }) => {
         <div ref={itemRef} className="fade-in card-hover" style={{
             background: 'var(--bg-card)',
             borderRadius: '16px',
-            border: '2px solid var(--border-color)',
             overflow: 'hidden',
-            marginBottom: '2rem'
+            marginBottom: '2rem',
+            padding: '2rem 2.25rem'
         }}>
-            {/* Top Banner section */}
+            {/* Header section (Replaces bright gradient with clean Xellara layout) */}
             <div style={{
-                background: data.gradient,
-                padding: '2rem',
-                color: 'white',
-                position: 'relative'
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+                gap: '1.5rem',
+                flexWrap: 'wrap',
+                paddingBottom: '1.75rem',
+                borderBottom: '1px solid var(--border-color)'
             }}>
-                <div className="edu-banner-inner" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem', flexWrap: 'wrap' }}>
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', flex: 1, minWidth: 0 }}>
-                        <div style={{
-                            background: 'rgba(255, 255, 255, 0.2)',
-                            padding: '1rem',
-                            borderRadius: '12px',
-                            backdropFilter: 'blur(5px)',
-                            flexShrink: 0
-                        }}>
-                            <GraduationCap size={32} color="white" />
-                        </div>
-                        <div style={{ minWidth: 0, flex: 1 }}>
-                            <h3 style={{ fontSize: '1.5rem', fontWeight: 700, margin: 0, color: 'white', wordBreak: 'break-word' }}>{data.title}</h3>
-                            <p style={{ fontSize: '1.1rem', opacity: 0.9, marginTop: '4px' }}>{data.subtitle}</p>
-
-                            <div style={{ display: 'flex', gap: '1.5rem', marginTop: '1rem', flexWrap: 'wrap' }}>
-                                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.9rem', opacity: 0.8 }}>
-                                    <MapPin size={16} /> {data.location}
-                                </span>
-                                <span style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.9rem', opacity: 0.8 }}>
-                                    <Calendar size={16} /> {data.period}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="edu-score-box" style={{
-                        background: 'rgba(255, 255, 255, 0.2)',
-                        padding: '1rem',
+                <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'flex-start', flex: 1, minWidth: 0 }}>
+                    <div style={{
+                        width: '48px',
+                        height: '48px',
                         borderRadius: '12px',
-                        textAlign: 'center',
-                        backdropFilter: 'blur(5px)',
-                        minWidth: '110px',
+                        background: 'var(--hover-primary)',
+                        border: '1px solid var(--border-color)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'var(--accent-color)',
                         flexShrink: 0
                     }}>
-                        <div style={{ fontSize: '0.8rem', opacity: 0.8, textTransform: 'uppercase', letterSpacing: '1px' }}>{data.scoreLabel}</div>
-                        <div style={{ fontSize: '1.5rem', fontWeight: 800 }}>{data.score}</div>
+                        <GraduationCap size={26} />
                     </div>
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
+                            <h3 style={{ fontSize: '1.4rem', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>
+                                {data.title}
+                            </h3>
+                        </div>
+                        <p style={{ fontSize: '1.05rem', color: 'var(--accent-color)', fontWeight: 500, margin: '2px 0 0.75rem' }}>
+                            {data.subtitle}
+                        </p>
+
+                        <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <MapPin size={15} color="var(--accent-color)" /> {data.location.replace('\n', ', ')}
+                            </span>
+                            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <Calendar size={15} color="var(--accent-color)" /> {data.period}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Score Pill Badge */}
+                <div className="ref-pill" style={{
+                    padding: '0.6rem 1.25rem',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: '12px',
+                    minWidth: '120px',
+                    textAlign: 'center',
+                    background: 'var(--bg-secondary)',
+                    border: '1px solid var(--border-color)'
+                }}>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>
+                        {data.scoreLabel}
+                    </span>
+                    <span style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--accent-color)', marginTop: '2px' }}>
+                        {data.score}
+                    </span>
                 </div>
             </div>
 
             {/* Details section */}
             <div className="edu-details" style={{
-                padding: '2rem',
+                paddingTop: '1.75rem',
                 display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '2rem'
+                gridTemplateColumns: '1.1fr 1fr',
+                gap: '2.5rem'
             }}>
+                {/* Achievements */}
                 <div>
                     <h4 style={{
-                        fontSize: '1.1rem',
+                        fontSize: '1rem',
                         fontWeight: 600,
                         marginBottom: '1rem',
-                        display: 'flex', alignItems: 'center', gap: '8px'
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        color: 'var(--text-primary)'
                     }}>
-                        <TrophyIcon /> Achievements
+                        <Trophy size={18} color="var(--accent-color)" /> Achievements
                     </h4>
                     <ul style={{ listStyle: 'none', padding: 0 }}>
                         {data.achievements.map((ach, i) => (
                             <li key={i} style={{
                                 display: 'flex',
-                                alignItems: 'flex-start',
-                                gap: '8px',
-                                marginBottom: '0.8rem',
-                                color: 'var(--text-secondary)'
+                                alignItems: 'center',
+                                gap: '10px',
+                                marginBottom: '0.65rem',
+                                color: 'var(--text-secondary)',
+                                fontSize: '0.925rem'
                             }}>
-                                <Check size={18} style={{ color: 'var(--accent-color)', flexShrink: 0, marginTop: '2px' }} />
+                                <span style={{
+                                    width: '20px',
+                                    height: '20px',
+                                    borderRadius: '50%',
+                                    background: 'var(--hover-primary)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    flexShrink: 0
+                                }}>
+                                    <Check size={12} color="var(--accent-color)" strokeWidth={3} />
+                                </span>
                                 {ach}
                             </li>
                         ))}
                     </ul>
                 </div>
 
+                {/* Results Metrics */}
                 <div>
-                    <h4 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '1rem' }}>{data.resultsLabel}</h4>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <h4 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '1rem', color: 'var(--text-primary)' }}>
+                        {data.resultsLabel}
+                    </h4>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))', gap: '0.85rem' }}>
                         {data.results.map((res, i) => (
                             <div key={i} style={{
-                                background: 'rgba(0, 0, 0, 0.1)',
-                                border: '2px solid var(--border-color)',
-                                padding: '1rem',
-                                borderRadius: '8px'
+                                background: 'var(--bg-secondary)',
+                                border: '1px solid var(--border-color)',
+                                padding: '0.75rem 0.85rem',
+                                borderRadius: '10px',
+                                textAlign: 'center'
                             }}>
-                                <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{res.label}</div>
-                                <div style={{ fontSize: '1.2rem', fontWeight: 700 }}>{res.value}</div>
+                                <div style={{ fontSize: '0.775rem', color: 'var(--text-secondary)', fontWeight: 500, marginBottom: '2px' }}>
+                                    {res.label}
+                                </div>
+                                <div style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+                                    {res.value}
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -129,17 +174,6 @@ const EducationItem = ({ index, data }) => {
     );
 };
 
-const TrophyIcon = () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
-        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
-        <path d="M4 22h16"></path>
-        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
-        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
-        <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
-    </svg>
-);
-
 const Education = () => {
     const educationData = [
         {
@@ -148,8 +182,7 @@ const Education = () => {
             location: 'Sri Krishna College of Engineering and Technology\nCoimbatore, Tamil Nadu, India',
             period: 'Sep 2023 - Sep 2027',
             scoreLabel: 'CGPA',
-            score: '8.57/10',
-            gradient: 'linear-gradient(135deg, #3b82f6, #9333ea)', // Blue to Purple
+            score: '8.63/10',
             achievements: ['iamneo java Programmer', 'CIA top performer', 'Technical Awards'],
             resultsLabel: 'Semester Results (SGPA)',
             results: [
@@ -166,7 +199,6 @@ const Education = () => {
             period: 'Jun 2022 - Apr 2023',
             scoreLabel: 'Score',
             score: '569/600 (94.8%)',
-            gradient: 'linear-gradient(135deg, #a855f7, #ec4899)', // Purple to Pink
             achievements: ['Rank holder', 'Art & cultural awards', 'Science Fair Awards'],
             resultsLabel: 'Subject Reports',
             results: [
@@ -179,12 +211,12 @@ const Education = () => {
     return (
         <section id="education" className="section" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div className="container">
-                <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-                    <h2 style={{ fontSize: '2.5rem', fontWeight: 700, display: 'inline-block' }} className="gradient-text">Education</h2>
-                    <div style={{ width: '60px', height: '4px', background: 'var(--accent-gradient)', margin: '0.5rem auto 0', borderRadius: '2px' }}></div>
+                <div className="section-header">
+                    <h2 className="section-title">Education</h2>
+                    <div className="teal-divider" />
                 </div>
 
-                <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+                <div style={{ maxWidth: '960px', margin: '0 auto' }}>
                     {educationData.map((data, index) => (
                         <EducationItem key={index} index={index} data={data} />
                     ))}
@@ -192,18 +224,10 @@ const Education = () => {
             </div>
             <style dangerouslySetInnerHTML={{
                 __html: `
-        @media (max-width: 768px) {
-          .edu-details { grid-template-columns: 1fr !important; }
-          .edu-score-box {
-            width: 100%;
-            min-width: unset !important;
-            text-align: left !important;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-          }
-        }
-      `}} />
+                @media (max-width: 768px) {
+                    .edu-details { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+                }
+            ` }} />
         </section>
     );
 };

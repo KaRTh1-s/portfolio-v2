@@ -12,33 +12,33 @@ const Badge = ({ badge, index }) => {
                 if (entry.isIntersecting) {
                     setTimeout(() => {
                         entry.target.classList.add('visible');
-                    }, index * 40);
+                    }, index * 30);
                 }
             },
-            { threshold: 0.01, rootMargin: '100px' }
+            { threshold: 0.05, rootMargin: '40px' }
         );
-        if (badgeRef.current) observer.observe(badgeRef.current);
+        const currentEl = badgeRef.current;
+        if (currentEl) observer.observe(currentEl);
         return () => {
-            if (badgeRef.current) observer.unobserve(badgeRef.current);
+            if (currentEl) observer.unobserve(currentEl);
         };
     }, [index]);
 
     return (
         <div ref={badgeRef} className="fade-in card-hover" style={{
             background: 'var(--bg-card)',
-            borderRadius: '16px',
-            border: '2px solid var(--border-color)',
-            padding: '2rem 1.5rem',
+            borderRadius: '14px',
+            padding: '1.75rem 1.25rem',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             textAlign: 'center',
-            gap: '1.5rem',
+            gap: '1.25rem',
             height: '100%'
         }}>
             <div style={{
-                width: '120px',
-                height: '160px',
+                width: '110px',
+                height: '140px',
                 background: 'transparent',
                 display: 'flex',
                 alignItems: 'center',
@@ -57,23 +57,23 @@ const Badge = ({ badge, index }) => {
                     <div style={{
                         width: '100%', height: '100%',
                         background: 'var(--bg-secondary)',
-                        borderRadius: '12px',
-                        border: `2px solid ${badge.color || 'var(--border-color)'}`,
+                        borderRadius: '10px',
+                        border: '1px solid var(--border-color)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         position: 'relative'
                     }}>
-                        <div style={{
-                            position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-                            background: `radial-gradient(circle at center, ${badge.color}20 0%, transparent 70%)`
-                        }}></div>
-                        <Trophy size={48} color={badge.color} style={{ opacity: 0.8, zIndex: 1 }} />
+                        <Trophy size={42} color="var(--accent-color)" style={{ opacity: 0.85, zIndex: 1 }} />
                     </div>
                 )}
             </div>
 
             <div>
-                <h4 style={{ fontSize: '1.1rem', fontWeight: 600, color: badge.color, marginBottom: '0.5rem' }}>{badge.title}</h4>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>{badge.description}</p>
+                <h4 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.35rem' }}>
+                    {badge.title}
+                </h4>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.825rem', lineHeight: 1.4 }}>
+                    {badge.description}
+                </p>
             </div>
         </div>
     );
@@ -81,49 +81,50 @@ const Badge = ({ badge, index }) => {
 
 const Achievements = () => {
     const leetcodeBadges = [
-        { title: '100 Days Badge 2025', description: 'Solving Problems 100+ Days in 2025', color: '#92400e', image: '/leetcode/100-days.png', imageStyle: { objectFit: 'cover', transform: 'scale(1.4)' } }, // Brown
-        { title: '50 Days Badge 2025', description: 'Solving Problems 50+ Days in 2025', color: '#4ade80', image: '/leetcode/50-days.png', imageStyle: { objectFit: 'cover', transform: 'scale(1.4)' } }, // Green
-        { title: 'DCC August 2025', description: 'Daily Coding Challenge August', color: '#fb923c', image: '/leetcode/dcc-aug.png', imageStyle: { objectFit: 'cover', transform: 'scale(1.4)' } }, // Orange
-        { title: 'DCC September 2025', description: 'Daily Coding Challenge September', color: '#f472b6', image: '/leetcode/dcc-sep.png', imageStyle: { objectFit: 'cover', transform: 'scale(1.4)' } }, // Pink
-        { title: 'SQL 50', description: 'Completed SQL 50 Problems', color: '#38bdf8', image: '/leetcode/sql-50.png', imageStyle: { objectFit: 'cover', transform: 'scale(1.4)' } } // Light Blue
+        { title: '100 Days Badge 2025', description: 'Solving Problems 100+ Days in 2025', image: '/leetcode/100-days.png', imageStyle: { objectFit: 'cover', transform: 'scale(1.3)' } },
+        { title: '50 Days Badge 2025', description: 'Solving Problems 50+ Days in 2025', image: '/leetcode/50-days.png', imageStyle: { objectFit: 'cover', transform: 'scale(1.3)' } },
+        { title: 'DCC August 2025', description: 'Daily Coding Challenge August', image: '/leetcode/dcc-aug.png', imageStyle: { objectFit: 'cover', transform: 'scale(1.3)' } },
+        { title: 'DCC September 2025', description: 'Daily Coding Challenge September', image: '/leetcode/dcc-sep.png', imageStyle: { objectFit: 'cover', transform: 'scale(1.3)' } },
+        { title: 'SQL 50', description: 'Completed SQL 50 Problems', image: '/leetcode/sql-50.png', imageStyle: { objectFit: 'cover', transform: 'scale(1.3)' } }
     ];
 
     const hackerrankBadges = [
-        { title: 'SQL', description: 'Certified in SQL', color: '#64748b', image: '/hackerrank/sql.png' }, // Slate
-        { title: 'Java', description: 'Certified in Java', color: '#78350f', image: '/hackerrank/java.png' }, // Coffee
-        { title: 'C++', description: 'Certified in C++', color: '#3b82f6', image: '/hackerrank/cpp.png' }, // Blue
-        { title: 'Problem Solving', description: 'Certified in Problem Solving', color: '#2dd4bf', image: '/hackerrank/problem-solving.png' } // Teal
+        { title: 'SQL', description: 'Certified in SQL', image: '/hackerrank/sql.png' },
+        { title: 'Java', description: 'Certified in Java', image: '/hackerrank/java.png' },
+        { title: 'C++', description: 'Certified in C++', image: '/hackerrank/cpp.png' },
+        { title: 'Problem Solving', description: 'Certified in Problem Solving', image: '/hackerrank/problem-solving.png' }
     ];
 
     return (
         <section id="achievements" className="section" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div className="container">
+                <div className="section-header" style={{ marginBottom: '2.5rem' }}>
+                    <h2 className="section-title">Achievements</h2>
+                    <div className="teal-divider" />
+                </div>
 
                 {/* LeetCode Section */}
-                <div style={{ marginBottom: '6rem' }}>
-                    <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                        <div style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '10px',
-                            padding: '0.8rem 2rem',
-                            background: '#78350f',
-                            color: '#000',
-                            borderRadius: '30px',
-                            fontWeight: 700,
-                            fontSize: '1.2rem',
-                            marginBottom: '1rem'
+                <div style={{ marginBottom: '4.5rem' }}>
+                    <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+                        <div className="ref-pill" style={{
+                            padding: '0.55rem 1.4rem',
+                            fontSize: '1rem',
+                            fontWeight: 600,
+                            gap: '8px',
+                            marginBottom: '0.65rem'
                         }}>
-                            <SiLeetcode size={24} /> LeetCode Achievements
+                            <SiLeetcode size={18} color="#FFA116" /> LeetCode Achievements
                         </div>
-                        <p style={{ color: 'var(--text-secondary)' }}>Coding challenges and problem-solving badges</p>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.925rem' }}>
+                            Coding challenges and problem-solving badges
+                        </p>
                     </div>
 
                     <div className="badges-grid-5" style={{
                         display: 'grid',
                         gridTemplateColumns: 'repeat(5, 1fr)',
-                        gap: '1.5rem',
-                        maxWidth: '1200px',
+                        gap: '1.25rem',
+                        maxWidth: '1160px',
                         margin: '0 auto'
                     }}>
                         {leetcodeBadges.map((badge, index) => (
@@ -134,29 +135,26 @@ const Achievements = () => {
 
                 {/* HackerRank Section */}
                 <div>
-                    <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                        <div style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '10px',
-                            padding: '0.8rem 2rem',
-                            background: '#2dd4bf', // Teal for HackerRank
-                            color: '#000',
-                            borderRadius: '30px',
-                            fontWeight: 700,
-                            fontSize: '1.2rem',
-                            marginBottom: '1rem'
+                    <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+                        <div className="ref-pill" style={{
+                            padding: '0.55rem 1.4rem',
+                            fontSize: '1rem',
+                            fontWeight: 600,
+                            gap: '8px',
+                            marginBottom: '0.65rem'
                         }}>
-                            <SiHackerrank size={24} /> HackerRank Achievements
+                            <SiHackerrank size={18} color="#2EC866" /> HackerRank Achievements
                         </div>
-                        <p style={{ color: 'var(--text-secondary)' }}>Skill certifications and problem-solving badges</p>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.925rem' }}>
+                            Skill certifications and problem-solving badges
+                        </p>
                     </div>
 
                     <div className="badges-grid-4" style={{
                         display: 'grid',
                         gridTemplateColumns: 'repeat(4, 1fr)',
-                        gap: '1.5rem',
-                        maxWidth: '1000px',
+                        gap: '1.25rem',
+                        maxWidth: '960px',
                         margin: '0 auto'
                     }}>
                         {hackerrankBadges.map((badge, index) => (
@@ -168,19 +166,15 @@ const Achievements = () => {
             </div>
             <style dangerouslySetInnerHTML={{
                 __html: `
-        @media (max-width: 1024px) {
-          .badges-grid-5 { grid-template-columns: repeat(3, 1fr) !important; }
-          .badges-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
-        }
-        @media (max-width: 640px) {
-          .badges-grid-5 { grid-template-columns: repeat(2, 1fr) !important; }
-          .badges-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
-        }
-        @media (max-width: 480px) {
-          .badges-grid-5 { grid-template-columns: 1fr !important; }
-          .badges-grid-4 { grid-template-columns: 1fr !important; }
-        }
-      `}} />
+                @media (max-width: 1024px) {
+                    .badges-grid-5 { grid-template-columns: repeat(3, 1fr) !important; }
+                    .badges-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
+                }
+                @media (max-width: 640px) {
+                    .badges-grid-5 { grid-template-columns: repeat(2, 1fr) !important; gap: 0.85rem !important; }
+                    .badges-grid-4 { grid-template-columns: repeat(2, 1fr) !important; gap: 0.85rem !important; }
+                }
+            ` }} />
         </section>
     );
 };

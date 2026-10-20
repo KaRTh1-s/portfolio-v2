@@ -11,41 +11,49 @@ const SkillCard = ({ skill, index }) => {
                 if (entry.isIntersecting) {
                     setTimeout(() => {
                         entry.target.classList.add('visible');
-                    }, index * 30);
+                    }, index * 25);
                 }
             },
-            { threshold: 0.01, rootMargin: '50px' }
+            { threshold: 0.05, rootMargin: '40px' }
         );
-        if (cardRef.current) observer.observe(cardRef.current);
+        const currentEl = cardRef.current;
+        if (currentEl) observer.observe(currentEl);
         return () => {
-            if (cardRef.current) observer.unobserve(cardRef.current);
+            if (currentEl) observer.unobserve(currentEl);
         };
     }, [index]);
 
     return (
         <div ref={cardRef} className="fade-in card-hover" style={{
             background: 'var(--bg-card)',
-            borderRadius: '16px',
-            border: '2px solid var(--border-color)',
-            padding: '2rem 1.5rem',
+            borderRadius: '14px',
+            padding: '1.75rem 1.25rem',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '1rem',
-            cursor: 'default'
+            gap: '0.85rem',
+            cursor: 'default',
+            height: '100%'
         }}>
             <div style={{
                 color: skill.color,
-                fontSize: '3rem',
+                fontSize: '2.5rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                transition: 'transform 0.3s ease'
+                transition: 'transform 0.25s ease'
             }} className="skill-icon">
                 {skill.icon}
             </div>
-            <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{skill.name}</span>
+            <span style={{
+                fontWeight: 600,
+                color: 'var(--text-primary)',
+                fontSize: '0.925rem',
+                textAlign: 'center'
+            }}>
+                {skill.name}
+            </span>
         </div>
     );
 };
@@ -58,32 +66,32 @@ const Skills = () => {
         { name: 'React', icon: <FaReact />, color: '#61DAFB' },
         { name: 'Java', icon: <FaJava />, color: '#007396' },
         { name: 'Spring Boot', icon: <FaLeaf />, color: '#6DB33F' },
-        { name: 'DSA', icon: <FiCode />, color: '#3b82f6' },
+        { name: 'DSA', icon: <FiCode />, color: '#007F78' },
         { name: 'Docker', icon: <FaDocker />, color: '#2496ED' },
         { name: 'Git', icon: <FaGitAlt />, color: '#F05032' },
         { name: 'REST API', icon: <FaDatabase />, color: '#10b981' },
         { name: 'MySQL', icon: <FaDatabase />, color: '#4479A1' },
-        { name: 'DBMS', icon: <FaDatabase />, color: '#78350f' },
+        { name: 'DBMS', icon: <FaDatabase />, color: '#007F78' },
         { name: 'AWS', icon: <FaAws />, color: '#FF9900' },
         { name: 'Linux Admin', icon: <FaLinux />, color: '#FCC624' },
-        { name: 'Networking', icon: <FaNetworkWired />, color: '#3b82f6' },
-        { name: 'Prompt Eng', icon: <FaBrain />, color: '#ec4899' }
+        { name: 'Networking', icon: <FaNetworkWired />, color: '#008CA0' },
+        { name: 'Prompt Eng', icon: <FaBrain />, color: '#8b5cf6' }
     ];
 
     return (
         <section id="skills" className="section" style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div className="container">
-                <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-                    <h2 style={{ fontSize: '2.5rem', fontWeight: 700, display: 'inline-block' }} className="gradient-text">Skills</h2>
-                    <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>Technologies and tools I work with</p>
-                    <div style={{ width: '60px', height: '4px', background: 'var(--accent-gradient)', margin: '1rem auto 0', borderRadius: '2px' }}></div>
+                <div className="section-header">
+                    <h2 className="section-title">Skills</h2>
+                    <div className="teal-divider" />
+                    <p className="section-subtitle">Technologies and tools I work with</p>
                 </div>
 
                 <div className="skills-grid" style={{
                     display: 'grid',
                     gridTemplateColumns: 'repeat(4, 1fr)',
-                    gap: '1.5rem',
-                    maxWidth: '1000px',
+                    gap: '1.25rem',
+                    maxWidth: '960px',
                     margin: '0 auto'
                 }}>
                     {skills.map((skill, index) => (
@@ -93,16 +101,16 @@ const Skills = () => {
             </div>
             <style dangerouslySetInnerHTML={{
                 __html: `
-        .skill-icon:hover {
-          transform: scale(1.1);
-        }
-        @media (max-width: 900px) {
-          .skills-grid { grid-template-columns: repeat(3, 1fr) !important; }
-        }
-        @media (max-width: 640px) {
-          .skills-grid { grid-template-columns: repeat(2, 1fr) !important; }
-        }
-      `}} />
+                .card-hover:hover .skill-icon {
+                    transform: translateY(-2px);
+                }
+                @media (max-width: 900px) {
+                    .skills-grid { grid-template-columns: repeat(3, 1fr) !important; }
+                }
+                @media (max-width: 600px) {
+                    .skills-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 0.85rem !important; }
+                }
+            ` }} />
         </section>
     );
 };
