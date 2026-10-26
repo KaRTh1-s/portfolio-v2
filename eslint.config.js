@@ -13,7 +13,7 @@ export default defineConfig([
       globals: {
         ...globals.node,
       },
-      sourceType: 'commonjs',
+      sourceType: 'module',
     },
   },
   {

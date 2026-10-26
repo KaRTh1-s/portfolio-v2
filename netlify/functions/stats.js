@@ -196,7 +196,7 @@ async function fetchLeetCodeData(username) {
     };
 }
 
-exports.handler = async () => {
+export const handler = async (event, context) => {
     const githubUser = process.env.GITHUB_USERNAME || 'KaRTh1-s';
     const leetcodeUser = process.env.LEETCODE_USERNAME || 'K_a_R_T_h_I';
     const githubToken = process.env.GITHUB_TOKEN || '';
@@ -262,3 +262,5 @@ exports.handler = async () => {
         })
     };
 };
+
+export default handler;
