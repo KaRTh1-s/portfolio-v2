@@ -2,6 +2,10 @@
   command = "npm run build"
   publish = "dist"
 
+[build.environment]
+  # EmailJS IDs/public key are intentionally inlined into the client bundle by Vite
+  SECRETS_SCAN_OMIT_KEYS = "VITE_EMAILJS_SERVICE_ID,VITE_EMAILJS_TEMPLATE_ID,VITE_EMAILJS_PUBLIC_KEY"
+
 [functions]
   directory = "netlify/functions"
 
