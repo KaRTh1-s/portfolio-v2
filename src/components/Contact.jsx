@@ -1,44 +1,101 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { MapPin, Phone, Mail, Github, Linkedin, Facebook, Instagram, Download, CheckCircle, Send } from 'lucide-react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
+import { MapPin, Mail, Github, Linkedin, Send, CheckCircle, AlertCircle, Info } from 'lucide-react';
+import { SiLeetcode } from 'react-icons/si';
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
     const leftRef = useRef(null);
     const rightRef = useRef(null);
-    const [result, setResult] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [showSuccess, setShowSuccess] = useState(false);
 
-    const onSubmit = async (event) => {
-        event.preventDefault();
-        setIsSubmitting(true);
-        setResult("Sending....");
-        const formData = new FormData(event.target);
-        formData.append("access_key", "eb86d257-69a1-4140-a63a-ac6cd9ce7c47");
+    // Dynamic anti-scraping email assembly
+    const emailParts = useMemo(() => ({
+        user: 'karthiselvaraj.dec13',
+        domain: 'gmail.com'
+    }), []);
+    const emailAddress = `${emailParts.user}@${emailParts.domain}`;
+
+    const [formValues, setFormValues] = useState({
+        name: '',
+        email: '',
+        message: ''
+    });
+    const [submissionState, setSubmissionState] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error' | 'unconfigured'
+    const [feedbackMessage, setFeedbackMessage] = useState('');
+
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+    const isConfigured = Boolean(serviceId && templateId && publicKey);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormValues(prev => ({ ...prev, [name]: value }));
+        if (submissionState !== 'idle') {
+            setSubmissionState('idle');
+            setFeedbackMessage('');
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const trimmedName = formValues.name.trim();
+        const trimmedEmail = formValues.email.trim();
+        const trimmedMessage = formValues.message.trim();
+
+        // Validation
+        if (!trimmedName || !trimmedEmail || !trimmedMessage) {
+            setSubmissionState('error');
+            setFeedbackMessage('Please fill in all required fields.');
+            return;
+        }
+
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(trimmedEmail)) {
+            setSubmissionState('error');
+            setFeedbackMessage('Please enter a valid email address.');
+            return;
+        }
+
+        // Check if EmailJS configuration is provided
+        if (!isConfigured) {
+            setSubmissionState('unconfigured');
+            setFeedbackMessage('EmailJS is not yet configured with environment variables (VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, VITE_EMAILJS_PUBLIC_KEY). Please connect directly via email below.');
+            return;
+        }
+
+        setSubmissionState('loading');
+        setFeedbackMessage('');
 
         try {
-            const response = await fetch("https://api.web3forms.com/submit", {
-                method: "POST",
-                body: formData
-            });
+            const templateParams = {
+                from_name: trimmedName,
+                name: trimmedName,
+                reply_to: trimmedEmail,
+                email: trimmedEmail,
+                message: trimmedMessage
+            };
 
-            const data = await response.json();
+            const response = await emailjs.send(
+                serviceId,
+                templateId,
+                templateParams,
+                publicKey
+            );
 
-            if (data.success) {
-                setResult("");
-                setShowSuccess(true);
-                event.target.reset();
-                setTimeout(() => {
-                    setShowSuccess(false);
-                }, 5000);
+            if (response.status === 200 || response.text === 'OK') {
+                setSubmissionState('success');
+                setFeedbackMessage('Thank you! Your message has been sent successfully.');
+                setFormValues({ name: '', email: '', message: '' });
             } else {
-                console.log("Error", data);
-                setResult(data.message);
+                throw new Error(response.text || 'EmailJS submission rejected');
             }
-        } catch (error) {
-            console.error("Submission Error", error);
-            setResult("An error occurred during submission.");
-        } finally {
-            setIsSubmitting(false);
+        } catch (err) {
+            setSubmissionState('error');
+            setFeedbackMessage(
+                err?.text || err?.message || 'Unable to deliver message through EmailJS. Please connect directly via email:'
+            );
         }
     };
 
@@ -63,38 +120,16 @@ const Contact = () => {
         };
     }, []);
 
+    const mailtoFallback = `mailto:${emailAddress}?subject=${encodeURIComponent(`Portfolio Message from ${formValues.name || 'Visitor'}`)}&body=${encodeURIComponent(formValues.message || '')}`;
+
     return (
         <>
-            {/* Success Notification */}
-            <div style={{
-                position: 'fixed',
-                top: showSuccess ? '85px' : '-120px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                background: 'var(--bg-card)',
-                border: '1px solid var(--accent-color)',
-                padding: '0.85rem 1.4rem',
-                borderRadius: '10px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                boxShadow: '0 10px 25px rgba(0, 127, 120, 0.2)',
-                zIndex: 9999,
-                transition: 'top 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
-                maxWidth: 'calc(100vw - 2rem)',
-                boxSizing: 'border-box',
-                whiteSpace: 'nowrap',
-            }}>
-                <CheckCircle color="var(--accent-color)" size={20} />
-                <span style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.9rem' }}>Message sent successfully!</span>
-            </div>
-
-            <section id="contact" className="section" style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingBottom: '3rem' }}>
+            <section id="contact" className="section" style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingBottom: '4rem' }}>
                 <div className="container">
                     <div className="section-header">
                         <h2 className="section-title">Let's Connect</h2>
                         <div className="teal-divider" />
-                        <p className="section-subtitle">Get in touch for internships, projects, or collaborations</p>
+                        <p className="section-subtitle">Get in touch for internships, engineering roles, or collaborations</p>
                     </div>
 
                     <div className="contact-grid" style={{
@@ -105,7 +140,7 @@ const Contact = () => {
                         maxWidth: '1000px',
                         margin: '0 auto'
                     }}>
-                        {/* Contact Information Card (Left) */}
+                        {/* Contact Information Card */}
                         <div ref={leftRef} className="fade-in ref-card" style={{
                             padding: '2.25rem',
                             display: 'flex',
@@ -118,6 +153,7 @@ const Contact = () => {
                             </h3>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                                {/* Location */}
                                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                                     <div style={{
                                         background: 'var(--hover-primary)',
@@ -135,23 +171,7 @@ const Contact = () => {
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                    <div style={{
-                                        background: 'var(--hover-primary)',
-                                        color: 'var(--accent-color)',
-                                        padding: '0.75rem',
-                                        borderRadius: '10px',
-                                        border: '1px solid var(--border-color)',
-                                        flexShrink: 0
-                                    }}>
-                                        <Phone size={20} />
-                                    </div>
-                                    <div>
-                                        <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500 }}>Mobile</p>
-                                        <p style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.95rem' }}>+91 9344667748</p>
-                                    </div>
-                                </div>
-
+                                {/* Email - Displayed exactly once across site */}
                                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                                     <div style={{
                                         background: 'var(--hover-primary)',
@@ -165,49 +185,61 @@ const Contact = () => {
                                     </div>
                                     <div style={{ minWidth: 0 }}>
                                         <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 500 }}>Email</p>
-                                        <p style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.95rem', wordBreak: 'break-all' }}>karthiselvaraj.dec13@gmail.com</p>
+                                        <a
+                                            href={`mailto:${emailAddress}`}
+                                            style={{
+                                                fontWeight: 600,
+                                                color: 'var(--text-primary)',
+                                                fontSize: '0.95rem',
+                                                wordBreak: 'break-all',
+                                                textDecoration: 'none'
+                                            }}
+                                            className="contact-email-link"
+                                        >
+                                            {emailAddress}
+                                        </a>
                                     </div>
                                 </div>
                             </div>
 
+                            {/* Social Profiles: GitHub, LinkedIn, LeetCode only */}
                             <div>
-                                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.85rem', fontWeight: 600 }}>Social Profiles</p>
+                                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.85rem', fontWeight: 600 }}>
+                                    Social Profiles
+                                </p>
                                 <div style={{ display: 'flex', gap: '0.75rem' }}>
-                                    <a href="https://github.com/KaRTh1-s" target="_blank" rel="noopener noreferrer" className="contact-social-btn" aria-label="GitHub">
+                                    <a
+                                        href="https://github.com/KaRTh1-s"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="contact-social-btn"
+                                        aria-label="GitHub profile"
+                                    >
                                         <Github size={18} />
                                     </a>
-                                    <a href="https://www.linkedin.com/in/karthikeyan-s-86457b290" target="_blank" rel="noopener noreferrer" className="contact-social-btn" aria-label="LinkedIn">
+                                    <a
+                                        href="https://www.linkedin.com/in/karthikeyan-s-86457b290/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="contact-social-btn"
+                                        aria-label="LinkedIn profile"
+                                    >
                                         <Linkedin size={18} />
                                     </a>
-                                    <a href="https://www.facebook.com/profile.php?id=100077635540839" target="_blank" rel="noopener noreferrer" className="contact-social-btn" aria-label="Facebook">
-                                        <Facebook size={18} />
-                                    </a>
-                                    <a href="https://www.instagram.com/s._k_a_r_t_h_i_/" target="_blank" rel="noopener noreferrer" className="contact-social-btn" aria-label="Instagram">
-                                        <Instagram size={18} />
+                                    <a
+                                        href="https://leetcode.com/u/K_a_R_T_h_I/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="contact-social-btn"
+                                        aria-label="LeetCode profile"
+                                    >
+                                        <SiLeetcode size={17} />
                                     </a>
                                 </div>
                             </div>
-
-                            <a
-                                href="/resume.pdf"
-                                download="Karthikeyan_S_Resume.pdf"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="btn-outline"
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    gap: '8px',
-                                    marginTop: '0.5rem',
-                                    padding: '0.75rem 1rem'
-                                }}
-                            >
-                                <Download size={18} /> Download Resume
-                            </a>
                         </div>
 
-                        {/* Send Message Form Card (Right) */}
+                        {/* Send Message Form Card */}
                         <div ref={rightRef} className="fade-in ref-card" style={{
                             padding: '2.25rem',
                             minWidth: 0
@@ -216,14 +248,23 @@ const Contact = () => {
                                 Send me a message
                             </h3>
 
-                            <form className="contact-form" onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                            <form
+                                onSubmit={handleSubmit}
+                                noValidate
+                                style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}
+                            >
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                                    <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Your Name</label>
+                                    <label htmlFor="contact-name" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                                        Name
+                                    </label>
                                     <input
+                                        id="contact-name"
                                         type="text"
                                         name="name"
                                         required
-                                        placeholder="John Doe"
+                                        value={formValues.name}
+                                        onChange={handleChange}
+                                        placeholder="Your name"
                                         className="ref-input"
                                         style={{
                                             padding: '0.85rem 1rem',
@@ -232,19 +273,23 @@ const Contact = () => {
                                             background: 'var(--bg-secondary)',
                                             color: 'var(--text-primary)',
                                             fontSize: '0.95rem',
-                                            fontFamily: 'inherit',
-                                            transition: 'border-color 0.2s ease, box-shadow 0.2s ease'
+                                            fontFamily: 'inherit'
                                         }}
                                     />
                                 </div>
 
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                                    <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Your Email</label>
+                                    <label htmlFor="contact-email" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                                        Email address
+                                    </label>
                                     <input
+                                        id="contact-email"
                                         type="email"
                                         name="email"
                                         required
-                                        placeholder="john@example.com"
+                                        value={formValues.email}
+                                        onChange={handleChange}
+                                        placeholder="Your email"
                                         className="ref-input"
                                         style={{
                                             padding: '0.85rem 1rem',
@@ -253,19 +298,23 @@ const Contact = () => {
                                             background: 'var(--bg-secondary)',
                                             color: 'var(--text-primary)',
                                             fontSize: '0.95rem',
-                                            fontFamily: 'inherit',
-                                            transition: 'border-color 0.2s ease, box-shadow 0.2s ease'
+                                            fontFamily: 'inherit'
                                         }}
                                     />
                                 </div>
 
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                                    <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Your Message</label>
+                                    <label htmlFor="contact-message" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                                        Message
+                                    </label>
                                     <textarea
+                                        id="contact-message"
                                         name="message"
                                         required
-                                        placeholder="Tell me about your project or how we can collaborate..."
                                         rows="4"
+                                        value={formValues.message}
+                                        onChange={handleChange}
+                                        placeholder="What would you like to talk about?"
                                         className="ref-input"
                                         style={{
                                             padding: '0.85rem 1rem',
@@ -275,31 +324,108 @@ const Contact = () => {
                                             color: 'var(--text-primary)',
                                             fontSize: '0.95rem',
                                             fontFamily: 'inherit',
-                                            resize: 'vertical',
-                                            transition: 'border-color 0.2s ease, box-shadow 0.2s ease'
+                                            resize: 'vertical'
                                         }}
                                     />
                                 </div>
 
                                 <button
                                     type="submit"
-                                    disabled={isSubmitting}
+                                    disabled={submissionState === 'loading'}
                                     className="btn-primary"
                                     style={{
                                         marginTop: '0.5rem',
                                         padding: '0.85rem 1.5rem',
-                                        opacity: isSubmitting ? 0.7 : 1,
-                                        cursor: isSubmitting ? 'not-allowed' : 'pointer'
+                                        opacity: submissionState === 'loading' ? 0.7 : 1,
+                                        cursor: submissionState === 'loading' ? 'not-allowed' : 'pointer',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '8px'
                                     }}
                                 >
                                     <Send size={16} />
-                                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                                    {submissionState === 'loading' ? 'Sending...' : 'Send Message'}
                                 </button>
 
-                                {result && (
-                                    <span style={{ color: 'var(--text-secondary)', textAlign: 'center', marginTop: '0.25rem', fontSize: '0.85rem' }}>
-                                        {result}
-                                    </span>
+                                {/* Submission Alerts */}
+                                {submissionState === 'success' && (
+                                    <div style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '8px',
+                                        padding: '0.75rem 1rem',
+                                        borderRadius: '8px',
+                                        background: 'var(--accent-subtle)',
+                                        border: '1px solid var(--accent-color)',
+                                        color: 'var(--accent-color)',
+                                        fontSize: '0.875rem',
+                                        fontWeight: 500
+                                    }}>
+                                        <CheckCircle size={18} />
+                                        <span>{feedbackMessage}</span>
+                                    </div>
+                                )}
+
+                                {submissionState === 'unconfigured' && (
+                                    <div style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '6px',
+                                        padding: '0.85rem 1rem',
+                                        borderRadius: '8px',
+                                        background: 'rgba(217, 119, 6, 0.1)',
+                                        border: '1px solid rgba(217, 119, 6, 0.4)',
+                                        color: 'var(--text-primary)',
+                                        fontSize: '0.875rem'
+                                    }}>
+                                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', color: '#D97706' }}>
+                                            <Info size={18} style={{ flexShrink: 0, marginTop: '2px' }} />
+                                            <span>{feedbackMessage}</span>
+                                        </div>
+                                        <a
+                                            href={mailtoFallback}
+                                            style={{
+                                                color: 'var(--accent-color)',
+                                                fontWeight: 600,
+                                                textDecoration: 'underline',
+                                                marginLeft: '26px'
+                                            }}
+                                        >
+                                            Send directly via {emailAddress}
+                                        </a>
+                                    </div>
+                                )}
+
+                                {submissionState === 'error' && (
+                                    <div style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '6px',
+                                        padding: '0.75rem 1rem',
+                                        borderRadius: '8px',
+                                        background: 'rgba(239, 68, 68, 0.1)',
+                                        border: '1px solid rgba(239, 68, 68, 0.4)',
+                                        color: '#EF4444',
+                                        fontSize: '0.875rem',
+                                        fontWeight: 500
+                                    }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                            <AlertCircle size={18} />
+                                            <span>{feedbackMessage}</span>
+                                        </div>
+                                        <a
+                                            href={mailtoFallback}
+                                            style={{
+                                                color: 'var(--accent-color)',
+                                                fontWeight: 600,
+                                                textDecoration: 'underline',
+                                                marginLeft: '26px'
+                                            }}
+                                        >
+                                            Send directly via {emailAddress}
+                                        </a>
+                                    </div>
                                 )}
                             </form>
                         </div>
@@ -307,90 +433,57 @@ const Contact = () => {
                 </div>
             </section>
 
-            {/* Clean Minimal Footer */}
+            {/* Clean Minimal One-Line Footer */}
             <footer style={{
                 background: 'var(--bg-secondary)',
                 borderTop: '1px solid var(--border-color)',
-                padding: '3.5rem 0 2rem',
-                overflow: 'hidden',
+                padding: '1.5rem 0',
                 width: '100%'
             }}>
-                <div className="container">
-                    <div className="footer-grid" style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1.5fr)',
-                        gap: '2.5rem',
-                        marginBottom: '2.5rem'
+                <div className="container" style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                    gap: '1rem'
+                }}>
+                    <p style={{
+                        margin: 0,
+                        fontSize: '0.9rem',
+                        fontWeight: 500,
+                        color: 'var(--text-secondary)'
                     }}>
-                        <div style={{ minWidth: 0 }}>
-                            <h2 style={{
-                                fontSize: '1.4rem',
-                                fontWeight: 800,
-                                marginBottom: '0.75rem',
-                                color: 'var(--text-primary)',
-                                letterSpacing: '-0.02em'
-                            }}>
-                                KARTHIKEYAN S
-                            </h2>
-                            <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6, fontSize: '0.925rem', maxWidth: '340px' }}>
-                                Full Stack Developer passionate about creating amazing web experiences and building scalable applications.
-                            </p>
-                        </div>
+                        &copy; 2026 Karthikeyan S
+                    </p>
 
-                        <div>
-                            <h3 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '1rem', color: 'var(--text-primary)' }}>
-                                Quick Links
-                            </h3>
-                            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-                                {['Home', 'About', 'Education', 'Experience', 'Projects', 'Skills', 'Contact'].map(link => (
-                                    <li key={link}>
-                                        <a
-                                            href={`#${link.toLowerCase()}`}
-                                            className="footer-nav-link"
-                                            style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', transition: 'color 0.2s ease' }}
-                                        >
-                                            {link}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-
-                        <div>
-                            <h3 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '1rem', color: 'var(--text-primary)' }}>
-                                Get in Touch
-                            </h3>
-                            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                                <li>+91 9344667748</li>
-                                <li>Coimbatore, Tamil Nadu, India</li>
-                                <li style={{ marginTop: '0.5rem' }}>
-                                    <a
-                                        href="/resume.pdf"
-                                        download="Karthikeyan_S_Resume.pdf"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="btn-primary"
-                                        style={{
-                                            display: 'inline-flex',
-                                            padding: '0.5rem 1rem',
-                                            fontSize: '0.825rem'
-                                        }}
-                                    >
-                                        <Download size={14} /> Download Resume
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div style={{
-                        borderTop: '1px solid var(--border-color)',
-                        paddingTop: '1.75rem',
-                        textAlign: 'center',
-                        color: 'var(--text-secondary)',
-                        fontSize: '0.85rem'
-                    }}>
-                        <p>&copy; {new Date().getFullYear()} Karthikeyan S. All rights reserved.</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <a
+                            href="https://github.com/KaRTh1-s"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="contact-social-btn"
+                            aria-label="GitHub"
+                        >
+                            <Github size={16} />
+                        </a>
+                        <a
+                            href="https://www.linkedin.com/in/karthikeyan-s-86457b290/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="contact-social-btn"
+                            aria-label="LinkedIn"
+                        >
+                            <Linkedin size={16} />
+                        </a>
+                        <a
+                            href="https://leetcode.com/u/K_a_R_T_h_I/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="contact-social-btn"
+                            aria-label="LeetCode"
+                        >
+                            <SiLeetcode size={16} />
+                        </a>
                     </div>
                 </div>
             </footer>
@@ -415,17 +508,20 @@ const Contact = () => {
                     transform: translateY(-2px);
                     box-shadow: 0 4px 10px rgba(0, 127, 120, 0.15);
                 }
+                .contact-social-btn:focus-visible, .contact-email-link:focus-visible {
+                    outline: 2px solid var(--accent-color);
+                    outline-offset: 2px;
+                }
+                .contact-email-link:hover {
+                    color: var(--accent-color) !important;
+                }
                 .ref-input:focus {
                     outline: none;
                     border-color: var(--accent-color) !important;
                     box-shadow: 0 0 0 3px rgba(0, 127, 120, 0.12) !important;
                 }
-                .footer-nav-link:hover {
-                    color: var(--accent-color) !important;
-                }
                 @media (max-width: 900px) {
                     .contact-grid { grid-template-columns: 1fr !important; }
-                    .footer-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
                 }
             ` }} />
         </>

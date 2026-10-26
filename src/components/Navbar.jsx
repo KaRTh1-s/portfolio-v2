@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Moon, Sun, Menu, X, Home, User, GraduationCap, Briefcase, FolderOpen, Code2, Mail, Award } from 'lucide-react';
+import { Moon, Sun, Menu, X, Home, User, GraduationCap, Briefcase, FolderOpen, Code2, Mail, Award, FileText } from 'lucide-react';
 
-const Navbar = () => {
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('portfolio-theme') || 'light';
-  });
+const Navbar = ({ theme, toggleTheme }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -16,21 +13,14 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('portfolio-theme', theme);
-  }, [theme]);
-
   // Close menu on resize to desktop
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 768) setIsMenuOpen(false);
+      if (window.innerWidth > 992) setIsMenuOpen(false);
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
 
   const navLinks = [
     { name: 'Home', href: '#home', icon: Home },
@@ -39,6 +29,7 @@ const Navbar = () => {
     { name: 'Experience', href: '#experience', icon: Briefcase },
     { name: 'Projects', href: '#projects', icon: FolderOpen },
     { name: 'Skills', href: '#skills', icon: Code2 },
+    { name: 'Achievements', href: '#achievements', icon: Award },
     { name: 'Contact', href: '#contact', icon: Mail },
   ];
 
@@ -75,14 +66,14 @@ const Navbar = () => {
           Portfolio<span style={{ color: 'var(--accent-color)' }}>.</span>
         </a>
 
-        {/* Desktop Links */}
-        <div style={{ display: 'flex', gap: '1.75rem', alignItems: 'center' }} className="desktop-menu">
+        {/* Desktop Links & Actions */}
+        <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }} className="desktop-menu">
           {navLinks.map((link) => (
             <a
               key={link.name}
               href={link.href}
               style={{
-                fontSize: '0.925rem',
+                fontSize: '0.9rem',
                 fontWeight: 500,
                 color: 'var(--text-primary)',
                 transition: 'color 0.2s ease'
@@ -92,6 +83,21 @@ const Navbar = () => {
               {link.name}
             </a>
           ))}
+
+          {/* Resume Navbar Button */}
+          <a
+            href="/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary nav-resume-btn"
+            style={{
+              padding: '0.45rem 1rem',
+              fontSize: '0.85rem',
+              borderRadius: '8px'
+            }}
+          >
+            <FileText size={14} /> Resume
+          </a>
 
           {/* Theme Toggle Button */}
           <button
@@ -117,7 +123,7 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Mobile Hamburger */}
+        {/* Mobile Hamburger Toggle */}
         <button
           className="mobile-toggle"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -145,7 +151,7 @@ const Navbar = () => {
       <div
         className="mobile-drawer"
         style={{
-          maxHeight: isMenuOpen ? '500px' : '0',
+          maxHeight: isMenuOpen ? '580px' : '0',
           overflow: 'hidden',
           transition: 'max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
           backgroundColor: theme === 'dark' ? 'rgba(15, 23, 22, 0.98)' : 'rgba(250, 249, 247, 0.98)',
@@ -154,8 +160,8 @@ const Navbar = () => {
           boxShadow: isMenuOpen ? '0 10px 25px rgba(0,0,0,0.05)' : 'none'
         }}
       >
-        <div style={{ padding: '1rem 1.25rem 1.25rem' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', marginBottom: '1rem' }}>
+        <div style={{ padding: '1rem 1.25rem 1.5rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', marginBottom: '1.25rem' }}>
             {navLinks.map((link) => {
               const Icon = link.icon;
               return (
@@ -196,6 +202,28 @@ const Navbar = () => {
             })}
           </div>
 
+          {/* Mobile Resume Button */}
+          <div style={{ marginBottom: '1rem' }}>
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '100%',
+                padding: '0.75rem',
+                gap: '8px',
+                borderRadius: '8px',
+                fontSize: '0.9rem'
+              }}
+            >
+              <FileText size={16} /> Download Resume
+            </a>
+          </div>
+
           <div style={{
             borderTop: '1px solid var(--border-color)',
             paddingTop: '0.85rem',
@@ -227,11 +255,11 @@ const Navbar = () => {
 
       <style dangerouslySetInnerHTML={{
         __html: `
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
           .desktop-menu { display: none !important; }
           .mobile-toggle { display: flex !important; }
         }
-        @media (min-width: 769px) {
+        @media (min-width: 993px) {
           .mobile-toggle { display: none !important; }
           .mobile-drawer { display: none !important; }
         }

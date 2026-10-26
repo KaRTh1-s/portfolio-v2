@@ -245,3 +245,38 @@ button {
 .gradient-text {
   color: var(--accent-color);
 }
+
+/* Card Target Highlight for In-Page Navigation */
+@keyframes cardTargetGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 127, 120, 0);
+  }
+  30% {
+    box-shadow: 0 0 0 4px var(--accent-color), var(--shadow-card-hover);
+    transform: translateY(-4px);
+  }
+  100% {
+    box-shadow: var(--shadow-card);
+    transform: translateY(0);
+  }
+}
+
+.card-target-highlight {
+  animation: cardTargetGlow 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+  border-color: var(--accent-color) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .card-target-highlight {
+    animation: none !important;
+    outline: 3px solid var(--accent-color);
+  }
+}

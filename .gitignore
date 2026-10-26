@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment & Netlify
+.env
+.env.*
+!.env.example
+.netlify

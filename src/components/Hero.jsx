@@ -147,7 +147,7 @@ const Hero = () => {
                             <FaGithub size={22} />
                         </a>
                         <a
-                            href="https://www.linkedin.com/in/karthikeyan-s-86457b290"
+                            href="https://www.linkedin.com/in/karthikeyan-s-86457b290/"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="hero-social-link"
